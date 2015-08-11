@@ -1,12 +1,14 @@
-#!/bin/bash
-#set -e
-#set -u
-#set -x
+#!/bin/sh
+set -eu
 
-CWD=`pwd`
-SWD=`(cd \`dirname $0\` && pwd)`
+CWD=$(pwd)
+SWD=$(cd $(dirname $0) && pwd)
 
+# trap
+trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 
 cd $HOME
 
 ln -s $SWD/.zshrc .zshrc
+
+exit 0
