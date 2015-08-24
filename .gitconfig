@@ -1,0 +1,11 @@
+[user]
+  name = Ryo Yoneyama (@yulii)
+  email = yone.info@gmail.com
+[push]
+  default = matching
+[core]
+  editor = /usr/bin/vim
+[alias]
+  issue-ref = "!f(){ git symbolic-ref HEAD | grep issue | sed -E 's/^.*issues\\/([0-9]+).*$/#\\1/g'; }; f"
+  ci = "!f(){ if [ $# -ge 2 ]; then git commit $1 \"$2 $(git issue-ref)\" ; else echo 'requires a comment!' ; fi ; } ; f"
+
