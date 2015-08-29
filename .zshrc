@@ -3,9 +3,12 @@ export LANG="ja_JP.UTF-8"
 PROMPT="%n %# "
 RPROMPT="[%/]"
 
-HISTFILE=~/.zsh_history
+setopt hist_ignore_dups
+HISTFILE=$HOME/histories/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
+
+setopt auto_pushd
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 
