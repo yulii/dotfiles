@@ -11,3 +11,7 @@
   ci = "!f(){ if [ $# -ge 2 ]; then git commit $1 \"$2 $(git issue-ref)\" ; else echo 'requires a comment!' ; fi ; } ; f"
   switch = "!f(){ git checkout $(git branch | peco); }; f"
 
+  # Clean branches
+  base-branch = "!f(){ echo 'master'; }; f"
+  delete-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git base-branch) | xargs git branch -d; git fetch --prune; }; f"
+
