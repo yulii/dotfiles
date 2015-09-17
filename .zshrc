@@ -65,3 +65,5 @@ if which rbenv  > /dev/null; then eval "$(rbenv init -)";   fi
 
 export PATH=$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
 
+alias updatedb='sudo /usr/libexec/locate.updatedb'
+
