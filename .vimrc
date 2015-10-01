@@ -35,37 +35,37 @@ augroup END
 au BufRead,BufNewFile *.json set filetype=json
 au BufRead,BufNewFile *.json.jpbuilder,*.json.jbuilder set filetype=ruby
 
-" Vundle
-set nocompatible
-filetype plugin indent off
+"" Vundle
+"set nocompatible
+"filetype plugin indent off
+"
+"if has('vim_starting')
+"  set runtimepath+=~/.vim/bundle/neobundle.vim
+"  call neobundle#begin(expand('~/.vim/bundle/'))
+"  NeoBundleFetch 'Shougo/neobundle.vim'
+"  call neobundle#end()
+"endif
+"
+"NeoBundleFetch 'Shougo/neobundle.vim'
+"
+"NeoBundle 'Shougo/neocomplcache'
+"NeoBundle 'Shougo/neocomplcache-rsense'
+"NeoBundle 'elzr/vim-json'
+"NeoBundle 'slim-template/vim-slim.git'
+"NeoBundle 'mattn/emmet-vim'
+"NeoBundle 'tpope/vim-rails'
+"
+"filetype plugin indent on
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim
-  call neobundle#begin(expand('~/.vim/bundle/'))
-  NeoBundleFetch 'Shougo/neobundle.vim'
-  call neobundle#end()
-endif
-
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neocomplcache-rsense'
-NeoBundle 'elzr/vim-json'
-NeoBundle 'slim-template/vim-slim.git'
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'tpope/vim-rails'
-
-filetype plugin indent on
-
-" neocomplcache
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_max_list = 20
-let g:neocomplcache_manual_completion_start_length = 3
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-" demiliter for function compl
-if !exists('g:neocomplcache_delimiter_patterns')
-  let g:neocomplcache_delimiter_patterns = {}
-endif
+"" neocomplcache
+"let g:neocomplcache_enable_at_startup = 1
+"let g:neocomplcache_max_list = 20
+"let g:neocomplcache_manual_completion_start_length = 3
+"let g:neocomplcache_enable_ignore_case = 1
+"let g:neocomplcache_enable_smart_case = 1
+"" demiliter for function compl
+"if !exists('g:neocomplcache_delimiter_patterns')
+"  let g:neocomplcache_delimiter_patterns = {}
+"endif
 
 syntax enable
