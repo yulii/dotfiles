@@ -60,6 +60,7 @@ if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
   antigen apply
 fi
 
+eval "$(ssh-agent -s)"
 if which rbenv  > /dev/null; then eval "$(rbenv init -)";   fi
 #if which direnv > /dev/null; then eval "$(direnv hook $0)"; fi
 if [ -f .plex/function.sh ]; then
