@@ -12,6 +12,7 @@ cd $HOME
 ln -s $SWD/.plex      .plex
 ln -s $SWD/.gitconfig .gitconfig
 ln -s $SWD/.vimrc     .vimrc
+ln -s $SWD/.zprofile  .zprofile
 ln -s $SWD/.zshrc     .zshrc
 
 exit 0

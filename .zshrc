@@ -60,7 +60,6 @@ if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
   antigen apply
 fi
 
-eval "$(ssh-agent -s)"
 if which rbenv  > /dev/null; then eval "$(rbenv init -)";   fi
 #if which direnv > /dev/null; then eval "$(direnv hook $0)"; fi
 if [ -f .plex/function.sh ]; then
@@ -68,6 +67,8 @@ if [ -f .plex/function.sh ]; then
 fi
 
 export PATH=$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
+
+# bundle config --global jobs `expr $(sysctl -n hw.ncpu) - 1`
 
 alias updatedb='sudo /usr/libexec/locate.updatedb'
 
