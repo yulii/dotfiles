@@ -1,6 +1,6 @@
 export LANG="ja_JP.UTF-8"
 
-PROMPT='[%/]
+PROMPT='[%*] [%n@%m: %/]
 %n %# '
 
 setopt hist_ignore_dups
@@ -47,8 +47,8 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
 function _update_vcs_info_msg() {
   LANG=en_US.UTF-8 vcs_info
-  PROMPT="[%/]${vcs_info_msg_0_}
-%n %# "
+  PROMPT="[%*] [%n@%m: %/]${vcs_info_msg_0_}
+%# "
 }
 
 add-zsh-hook precmd _update_vcs_info_msg
