@@ -1,7 +1,7 @@
 export LANG="ja_JP.UTF-8"
 
 PROMPT='[%*] [%n@%m: %/]
-%n %# '
+%# '
 
 setopt hist_ignore_dups
 HISTFILE=$HOME/histories/.zsh_history
