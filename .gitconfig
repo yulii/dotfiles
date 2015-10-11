@@ -5,10 +5,12 @@
   default = matching
 [core]
   editor = /usr/bin/vim
+[include]
+  path = .gitconfig.secret
 [alias]
   s = "status"
   wip   = "commit --allow-empty -m '[ci skip] wip commit'"
-  alias = "!git config --list | grep '^alias' | sort"
+  alias = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort"
   issue-ref = "!f(){ git symbolic-ref HEAD | grep issue | sed -E 's/^.*issues\\/([0-9]+).*$/#\\1/g'; }; f"
   ci = "!f(){ if [ $# -ge 2 ]; then git commit $1 \"$2 $(git issue-ref)\" ; else echo 'requires a comment!' ; fi ; } ; f"
   switch = "!f(){ git checkout $(git branch | peco); }; f"
