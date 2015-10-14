@@ -8,7 +8,9 @@
 [include]
   path = .gitconfig.secret
 [alias]
-  s = "status"
+  s  = "status"
+  co = "checkout"
+
   wip   = "commit --allow-empty -m '[ci skip] wip commit'"
   alias = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort"
   issue-ref = "!f(){ git symbolic-ref HEAD | grep issue | sed -E 's/^.*issues\\/([0-9]+).*$/#\\1/g'; }; f"
