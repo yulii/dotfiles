@@ -8,7 +8,7 @@
 [include]
   path = .gitconfig.secret
 [alias]
-  s  = "status"
+  st = "status --short --branch"
   co = "checkout"
 
   wip   = "commit --allow-empty -m '[ci skip] wip commit'"
