@@ -67,7 +67,7 @@ if [ -f .plex/function.sh ]; then
   source .plex/function.sh
 fi
 
-export PATH=$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
+export PATH=/usr/local/bin:$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
 
 # bundle config --global jobs `expr $(sysctl -n hw.ncpu) - 1`
 
