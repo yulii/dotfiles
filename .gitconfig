@@ -8,16 +8,23 @@
 [include]
   path = .gitconfig.secret
 [alias]
+  alias = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort"
+
   st = "status --short --branch"
   co = "checkout"
+  network = "log --graph --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'"
 
+  switch = "!f(){ git checkout $(git branch | peco); }; f"
+
+  # Commit
   wip   = "commit --allow-empty -m '[ci skip] wip commit'"
-  alias = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort"
   issue-ref = "!f(){ git symbolic-ref HEAD | grep issue | sed -E 's/^.*issues\\/([0-9]+).*$/#\\1/g'; }; f"
   ci = "!f(){ if [ $# -ge 2 ]; then git commit $1 \"$2 $(git issue-ref)\" ; else echo 'requires a comment!' ; fi ; } ; f"
-  switch = "!f(){ git checkout $(git branch | peco); }; f"
 
   # Clean branches
   base-branch     = "!f(){ echo 'master'; }; f"
   delete-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git base-branch) | xargs git branch -d; git fetch --prune; }; f"
+
+  # GitHub
+  view = "config --get remote.origin.url"
 
