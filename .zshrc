@@ -4,7 +4,7 @@ PROMPT='[%*] [%n@%m: %/]
 %# '
 
 setopt hist_ignore_dups
-HISTFILE=$HOME/histories/.zsh_history
+HISTFILE=$HOME/.histories/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
