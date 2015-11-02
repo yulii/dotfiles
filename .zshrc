@@ -1,10 +1,10 @@
 export LANG="ja_JP.UTF-8"
 
-PROMPT='[%/]
-%n %# '
+PROMPT='[%*] [%n@%m: %/]
+%# '
 
 setopt hist_ignore_dups
-HISTFILE=$HOME/histories/.zsh_history
+HISTFILE=$HOME/.histories/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
@@ -47,8 +47,8 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
 function _update_vcs_info_msg() {
   LANG=en_US.UTF-8 vcs_info
-  PROMPT="[%/]${vcs_info_msg_0_}
-%n %# "
+  PROMPT="[%*] [%n@%m: %/]${vcs_info_msg_0_}
+%# "
 }
 
 add-zsh-hook precmd _update_vcs_info_msg
@@ -67,7 +67,7 @@ if [ -f .plex/function.sh ]; then
   source .plex/function.sh
 fi
 
-export PATH=$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
+export PATH=/usr/local/bin:$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
 
 # bundle config --global jobs `expr $(sysctl -n hw.ncpu) - 1`
 
