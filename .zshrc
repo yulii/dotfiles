@@ -3,7 +3,9 @@ export LANG="ja_JP.UTF-8"
 PROMPT='[%*] [%n@%m: %/]
 %# '
 
-setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt share_history
 HISTFILE=$HOME/.histories/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
