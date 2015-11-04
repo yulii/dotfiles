@@ -17,13 +17,20 @@ function brewdle_install() {
 }
 
 function brewdle_dump() {
- [ -f $BREW_FILE ] && rm $BREW_FILE
- brew brewdle dump --file=$BREW_FILE
+  [ -f $BREW_FILE ] && rm $BREW_FILE
+  brew brewdle dump --file=$BREW_FILE
+}
+
+function brewdle_save() {
+  git checkout master
+  brewdle_dump
+  git add $BREW_FILE && git commit -m 'update brew installed list' && git push
 }
 
 case "$1" in
   install) brewdle_install ;;
   dump)    brewdle_dump    ;;
+  save)    brewdle_save    ;;
   *)       brewdle_install ;;
 esac
 
