@@ -11,6 +11,7 @@ cd $HOME
 
 ln -nfs $SWD/.plex      .plex
 ln -nfs $SWD/.bundle    .bundle
+ln -nfs $SWD/.gemrc     .gemrc
 ln -nfs $SWD/.gitconfig .gitconfig
 ln -nfs $SWD/.vimrc     .vimrc
 ln -nfs $SWD/.zprofile  .zprofile
