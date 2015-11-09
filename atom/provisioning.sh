@@ -14,8 +14,10 @@ apm install term2
 # Auto-Complete
 apm install autocomplete-paths
 
-
 # Git
-# apm install git-plus
+apm install git-plus
 apm install git-control
 apm install git-history
+
+# Ruby
+apm install ruby-slim
