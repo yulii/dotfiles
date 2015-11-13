@@ -68,6 +68,10 @@ if which rbenv  > /dev/null; then eval "$(rbenv init -)";   fi
 if [ -f .plex/function.sh ]; then
   source .plex/function.sh
 fi
+if [ -f .plex/alias.sh ]; then
+  source .plex/alias.sh
+fi
+
 
 export PATH=/usr/local/bin:$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
 
