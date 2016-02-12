@@ -63,7 +63,11 @@ if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
   antigen apply
 fi
 
-if which rbenv  > /dev/null; then eval "$(rbenv init -)";   fi
+# Load tools
+test -f .plex/tools/haskell && source .plex/tools/haskell
+test -f .plex/tools/ruby    && source .plex/tools/ruby
+test -f .plex/tools/node    && source .plex/tools/node
+
 #if which direnv > /dev/null; then eval "$(direnv hook $0)"; fi
 if [ -f .plex/function.sh ]; then
   source .plex/function.sh
@@ -71,11 +75,6 @@ fi
 if [ -f .plex/alias.sh ]; then
   source .plex/alias.sh
 fi
-
-
-export PATH=/usr/local/bin:$HOME/.cabal/bin:$HOME/.cabal-sandbox/bin:$PATH
-
-# bundle config --global jobs `expr $(sysctl -n hw.ncpu) - 1`
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 
 alias updatedb='sudo /usr/libexec/locate.updatedb'
-
