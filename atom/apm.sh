@@ -23,7 +23,7 @@ function apm_dump() {
 
 function apm_save() {
   git checkout master
-  brewdle_dump
+  apm_dump
   git add $PACKAGES_FILE && git commit -m 'update apm installed list' && git push
 }
 
