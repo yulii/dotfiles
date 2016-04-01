@@ -1,8 +1,8 @@
 autocomplete-paths@1.0.2
-file-icons@1.6.11
-git-control@0.4.0
+file-icons@1.6.21
+git-control@0.7.1
 git-history@3.2.0
-git-plus@5.5.4
+git-plus@5.13.3
 ruby-slim@0.2.0
 term2@0.9.21
 
