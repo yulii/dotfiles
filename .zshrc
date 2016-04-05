@@ -68,7 +68,7 @@ test -f .plex/tools/haskell && source .plex/tools/haskell
 test -f .plex/tools/ruby    && source .plex/tools/ruby
 test -f .plex/tools/node    && source .plex/tools/node
 
-#if which direnv > /dev/null; then eval "$(direnv hook $0)"; fi
+if which direnv > /dev/null; then eval "$(direnv hook $(basename $SHELL))"; fi
 if [ -f .plex/function.sh ]; then
   source .plex/function.sh
 fi
