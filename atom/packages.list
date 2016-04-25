@@ -4,6 +4,7 @@ file-icons@1.7.7
 git-control@0.7.1
 git-history@3.2.0
 git-plus@5.13.4
+language-elixir@0.12.3
 language-terraform@0.7.4
 ruby-slim@0.2.0
 term2@0.9.21
