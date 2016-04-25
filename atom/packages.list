@@ -1,9 +1,11 @@
+autocomplete-elixir@1.5.13
 autocomplete-paths@1.0.2
-file-icons@1.6.21
+file-icons@1.7.7
 git-control@0.7.1
 git-history@3.2.0
-git-plus@5.13.3
-language-terraform@0.7.2
+git-plus@5.13.4
+language-terraform@0.7.4
 ruby-slim@0.2.0
 term2@0.9.21
+
 
