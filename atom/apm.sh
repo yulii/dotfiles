@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-set -x
+# set -x
 
 CWD=$(pwd)
 SWD=$(cd $(dirname $0) && pwd)
