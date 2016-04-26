@@ -15,9 +15,11 @@ PACKAGES_FILE="$SWD/packages.list"
 
 function apm_link() {
   cd $HOME/.atom
-  ln -nfs $LWD/.atom/config.cson  config.cson
-  ln -nfs $LWD/.atom/keymap.cson  keymap.cson
-  ln -nfs $LWD/.atom/styles.less  styles.less
+  ln -nfs $LWD/.atom/config.cson    config.cson
+  ln -nfs $LWD/.atom/init.coffee    init.coffee
+  ln -nfs $LWD/.atom/keymap.cson    keymap.cson
+  ln -nfs $LWD/.atom/snippets.cson  snippets.cson
+  ln -nfs $LWD/.atom/styles.less    styles.less
 }
 
 function apm_install() {
