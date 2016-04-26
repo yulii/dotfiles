@@ -4,6 +4,7 @@ set -eu
 
 CWD=$(pwd)
 SWD=$(cd $(dirname $0) && pwd)
+LWD=$(cd $(dirname $0) && cd .. && pwd)
 
 # trap
 trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
@@ -12,8 +13,15 @@ trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 PACKAGES_FILE="$SWD/packages.list"
 # }}}
 
+function apm_link() {
+  cd $HOME/.atom
+  ln -nfs $LWD/.atom/config.cson  config.cson
+  ln -nfs $LWD/.atom/keymap.cson  keymap.cson
+  ln -nfs $LWD/.atom/styles.less  styles.less
+}
+
 function apm_install() {
-  cd $SWD && apm install --packages-file $PACKAGES_FILE
+  apm install --packages-file $PACKAGES_FILE
 }
 
 function apm_dump() {
@@ -28,6 +36,7 @@ function apm_save() {
 }
 
 case "$1" in
+  link)    apm_link    ;;
   install) apm_install ;;
   dump)    apm_dump    ;;
   save)    apm_save    ;;
