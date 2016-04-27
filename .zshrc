@@ -64,9 +64,10 @@ if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
 fi
 
 # Load tools
+test -f .plex/tools/go      && source .plex/tools/go
 test -f .plex/tools/haskell && source .plex/tools/haskell
-test -f .plex/tools/ruby    && source .plex/tools/ruby
 test -f .plex/tools/node    && source .plex/tools/node
+test -f .plex/tools/ruby    && source .plex/tools/ruby
 
 if which direnv > /dev/null; then eval "$(direnv hook $(basename $SHELL))"; fi
 if [ -f .plex/function.sh ]; then
