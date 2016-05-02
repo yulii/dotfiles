@@ -8,6 +8,15 @@ import (
   "os/exec"
 )
 
+func atom(cmd string) {
+  switch {
+  case cmd == "dump":
+    fmt.Println("dump")
+    return
+  }
+
+}
+
 func apm_list() {
   log.Println("[Exec] apm list --installed --bare")
   //  fmt.Println("[Exec] apm list --installed --bare")

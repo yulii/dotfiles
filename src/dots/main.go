@@ -10,7 +10,7 @@ func main() {
 
   switch {
   case os.Args[1] == "atom":
-  	fmt.Println("atom")
+    atom(os.Args[2])
     return
   }
   fmt.Println("unknown")
