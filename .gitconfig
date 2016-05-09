@@ -26,8 +26,9 @@
   cancel-commit = "reset --soft HEAD^"
 
   # Clean branches
-  base-branch     = "!f(){ echo 'master'; }; f"
-  delete-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git base-branch) | xargs git branch -d; git fetch --prune; }; f"
+  base-branch    = "!f(){ echo 'master'; }; f"
+  clean-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git base-branch) | xargs git branch -d; git fetch --prune; }; f"
+  clean-files    = "clean -fd"
 
   # GitHub
   view = "config --get remote.origin.url"
