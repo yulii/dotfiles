@@ -9,3 +9,17 @@ function find-projects() {
 alias sp='cd "$(find-projects | peco)"'
 
 # }}}
+
+
+function alpine() {
+  echo "docker run -it --rm alpine:${1:-latest} /bin/sh"
+  docker run -it --rm alpine:${1:-latest} /bin/sh
+}
+function centos() {
+  echo "docker run -it --rm centos:${1:-latest} /bin/bash"
+  docker run -it --rm centos:${1:-latest} /bin/bash
+}
+function ubuntu() {
+  echo "docker run -it --rm ubuntu:${1:-latest} /bin/bash"
+  docker run -it --rm ubuntu:${1:-latest} /bin/bash
+}
