@@ -13,12 +13,12 @@ BREW_FILE="$SWD/Brewfile"
 # }}}
 
 function brewdle_install() {
-  cd $SWD && brew brewdle
+  cd $SWD && brew bundle
 }
 
 function brewdle_dump() {
   [ -f $BREW_FILE ] && rm $BREW_FILE
-  brew brewdle dump --file=$BREW_FILE
+  brew bundle dump --file=$BREW_FILE
 }
 
 function brewdle_save() {
