@@ -7,5 +7,8 @@
     invisibles: {}
   "exception-reporting":
     userId: "975019ba-138d-fbaa-a46c-73a4b5b46b28"
+  "terraform-fmt":
+    binPath: "terraform"
+    fmtOnSave: true
   welcome:
     showOnStartup: false

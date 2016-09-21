@@ -1,26 +1,12 @@
-autocomplete-elixir@1.5.13
-autocomplete-go@1.0.6
 autocomplete-haskell@0.6.5
 autocomplete-paths@1.0.2
-builder-go@1.0.0
 file-icons@1.7.7
 git-control@0.7.1
 git-history@3.2.0
 git-plus@5.13.4
-go-config@1.1.4
-go-get@1.0.3
-go-plus@4.1.0
-gofmt@1.1.6
-gometalinter-linter@1.1.0
-gorename@1.0.2
-language-elixir@0.12.3
 language-haskell@1.7.18
 language-terraform@0.7.4
-linter@1.11.4
-navigator-godef@1.0.3
 ruby-slim@0.2.0
 term2@0.9.21
 terraform-fmt@0.3.0
-tester-go@1.0.4
-
 
