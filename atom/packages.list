@@ -1,12 +1,20 @@
+atom-alignment@0.12.1
 autocomplete-haskell@0.6.5
 autocomplete-paths@1.0.2
 file-icons@1.7.7
 git-control@0.7.1
 git-history@3.2.0
 git-plus@5.13.4
-language-haskell@1.7.18
+language-haskell@1.10.1
 language-terraform@0.7.4
+project-manager@1.15.10
+rails-transporter@1.2.0
+rspec@0.3.2
+rspec-snippets@0.4.0
 ruby-slim@0.2.0
-term2@0.9.21
-terraform-fmt@0.3.0
+seti-ui@0.7.1
+slim-language@2.2.0
+symbol-gen@1.0.0
+term3@0.22.0
+whitespace@0.30.0
 
