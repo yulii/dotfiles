@@ -2,7 +2,8 @@
   "autocomplete-elixir":
     elixirPath: "/usr/local/bin"
     erlangHome: "/usr/local/bin"
-  core: {}
+  core:
+    telemetryConsent: "no"
   editor:
     invisibles: {}
   "exception-reporting":
