@@ -7,6 +7,12 @@ SWD=$(cd $(dirname $0) && pwd)
 # trap
 trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 
+if ! grep $(which zsh) /etc/shells; then
+  sudo -- sh -c "echo $(which zsh) >> /etc/shells"
+fi
+
+chsh -s $(which zsh)
+
 cd $HOME
 
 ln -nfs $SWD/.plex      .plex
