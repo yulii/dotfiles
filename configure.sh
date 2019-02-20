@@ -7,20 +7,21 @@ SWD=$(cd $(dirname $0) && pwd)
 # trap
 trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 
-if ! grep $(which zsh) /etc/shells; then
-  sudo -- sh -c "echo $(which zsh) >> /etc/shells"
+( sh $SWD/init/link-dotfiles.sh )
+
+# zsh
+
+ZSH_PATH=$(which zsh)
+USER_SHELL=$(dscl localhost -read Local/Default/Users/$USER UserShell | cut -d' ' -f2)
+
+if ! grep $ZSH_PATH /etc/shells > /dev/null; then
+  sudo -- sh -c "echo $ZSH_PATH >> /etc/shells"
 fi
 
-chsh -s $(which zsh)
+if [ $ZSH_PATH != $USER_SHELL ]; then
+  chsh -s $(which zsh)
+fi
 
-cd $HOME
-
-ln -nfs $SWD/.plex      .plex
-ln -nfs $SWD/.bundle    .bundle
-ln -nfs $SWD/.gemrc     .gemrc
-ln -nfs $SWD/.gitconfig .gitconfig
-ln -nfs $SWD/.vimrc     .vimrc
-ln -nfs $SWD/.zprofile  .zprofile
-ln -nfs $SWD/.zshrc     .zshrc
+# zsh -c "compaudit | xargs ls -ld"
 
 exit 0
