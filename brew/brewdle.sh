@@ -1,6 +1,5 @@
 #!/bin/sh
 set -eu
-set -x
 
 CWD=$(pwd)
 SWD=$(cd $(dirname $0) && pwd)
@@ -35,4 +34,3 @@ case "$1" in
 esac
 
 exit 0
-
