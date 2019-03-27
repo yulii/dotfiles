@@ -33,3 +33,7 @@
   # GitHub
   view = "config --get remote.origin.url"
 
+[filter "ignore-secret-npm"]
+  smudge = "cat"
+  clean  = "sed '/^\\/\\/registry\\.npmjs\\.org\\/:_authToken=/d'"
+
