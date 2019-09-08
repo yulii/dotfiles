@@ -10,25 +10,3 @@ alias sp='cd "$(find-projects | peco)"'
 
 # }}}
 
-
-function docker-alpine() {
-  echo "docker run -it --rm alpine:${1:-latest} /bin/sh"
-  docker run -it --rm alpine:${1:-latest} /bin/sh
-}
-function docker-centos() {
-  echo "docker run -it --rm centos:${1:-latest} /bin/bash"
-  docker run -it --rm centos:${1:-latest} /bin/bash
-}
-function docker-ubuntu() {
-  echo "docker run -it --rm ubuntu:${1:-latest} /bin/bash"
-  docker run -it --rm ubuntu:${1:-latest} /bin/bash
-}
-
-function docker-delete-container() {
-  echo "docker rm \$(docker ps -a -q)"
-  docker rm $(docker ps -a -q)
-}
-function docker-delete-images() {
-  echo "docker rmi \$(docker images | awk '/^<none>/ { print $3 }')"
-  docker rmi $(docker images | awk '/^<none>/ { print $3 }')
-}
