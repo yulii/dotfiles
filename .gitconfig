@@ -23,18 +23,20 @@
   issue-ref = "!f(){ git symbolic-ref HEAD | grep issue | sed -E 's/^.*issues\\/([0-9]+).*$/#\\1/g'; }; f"
   ci = "!f(){ if [ $# -ge 2 ]; then git commit $1 \"$2 $(git issue-ref)\" ; else echo 'requires a comment!' ; fi ; } ; f"
 
-  rebase-pull-request = "!f(){ cb=$(git current-branch) && git fetch && git checkout -b $(git current-branch | sed 's/^wip\\///') $1 && git merge --squash ${cb}; }; f"
-
   # Branch
-  current-branch = symbolic-ref --short HEAD
+  current-branch  = symbolic-ref --short HEAD
+  base-branch     = !git config "branch.$(git current-branch).base"
+
+  checkout-work-branch = "!f(){ cb=$(git current-branch) && git co -b \"wip/${1}\" && git base-branch \"${cb}\"; }; f"
+  rebase-work-branch   = "!f(){ cb=$(git current-branch) && git fetch && git checkout -b $(git current-branch | sed 's/^wip\\///') $(git base-branch) && git merge --squash ${cb}; }; f"
 
   # Cancel
   cancel-add    = reset HEAD
   cancel-commit = reset --soft HEAD^
 
   # Clean branches
-  base-branch    = "!f(){ echo 'master'; }; f"
-  clean-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git base-branch) | xargs git branch -d; git fetch --prune; }; f"
+  frozen-branch  = "!f(){ echo 'master'; }; f"
+  clean-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git frozen-branch) | xargs git branch -d; git fetch --prune; }; f"
   clean-files    = clean -fd
 
   # GitHub
