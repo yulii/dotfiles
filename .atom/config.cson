@@ -1,8 +1,12 @@
 "*":
-  "autocomplete-elixir":
-    elixirPath: "/usr/local/bin"
-    erlangHome: "/usr/local/bin"
   core:
+    ignoredNames: [
+      ".git"
+      ".DS_Store"
+      "._*"
+      "node_modules"
+      ".nuxt"
+    ]
     telemetryConsent: "no"
   editor:
     invisibles: {}
