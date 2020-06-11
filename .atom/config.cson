@@ -1,5 +1,8 @@
 "*":
   core:
+    disabledPackages: [
+      "spell-check"
+    ]
     ignoredNames: [
       ".git"
       ".DS_Store"
