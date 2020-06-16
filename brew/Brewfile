@@ -11,6 +11,7 @@ brew "docker", link: false
 brew "harfbuzz"
 brew "ffmpeg"
 brew "git"
+brew "git-secrets"
 brew "jq"
 brew "peco"
 brew "tree"
