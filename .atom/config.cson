@@ -20,7 +20,7 @@
       "en-US"
     ]
   "terraform-fmt":
-    binPath: "terraform"
+    binPath: "/usr/local/bin/terraform"
     fmtOnSave: true
   welcome:
     showOnStartup: false

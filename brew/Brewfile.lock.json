@@ -481,7 +481,28 @@
           }
         }
       },
-      "heroku/brew/heroku": null
+      "heroku/brew/heroku": null,
+      "oath-toolkit": {
+        "version": "2.6.2_1",
+        "bottle": {
+          "cellar": "/usr/local/Cellar",
+          "prefix": "/usr/local",
+          "files": {
+            "catalina": {
+              "url": "https://homebrew.bintray.com/bottles/oath-toolkit-2.6.2_1.catalina.bottle.1.tar.gz",
+              "sha256": "24a65399ed4b462a3291c542616e1a5dad4df008dcb116fd12c34030f05135b0"
+            },
+            "mojave": {
+              "url": "https://homebrew.bintray.com/bottles/oath-toolkit-2.6.2_1.mojave.bottle.1.tar.gz",
+              "sha256": "ab9cbc2e7e8c7004c5a3db7fbc4b6a0cbc9560a353a306cba0fa4d1174a46f68"
+            },
+            "high_sierra": {
+              "url": "https://homebrew.bintray.com/bottles/oath-toolkit-2.6.2_1.high_sierra.bottle.1.tar.gz",
+              "sha256": "a7fbff2831b4c6a61896c65b482b3db50d2e070e1e74772e7fb929bbd4a586f0"
+            }
+          }
+        }
+      }
     },
     "cask": {
       "alfred": {
