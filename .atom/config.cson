@@ -16,6 +16,9 @@
     showInvisibles: true
   "exception-reporting":
     userId: "975019ba-138d-fbaa-a46c-73a4b5b46b28"
+  "linter-eslint":
+    global: {}
+  "linter-ui-default": {}
   "spell-check":
     locales: [
       "en-US"
