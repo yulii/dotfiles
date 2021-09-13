@@ -1,1 +1,1 @@
-#eval "$(ssh-agent -s)"
+eval "$(/opt/homebrew/bin/brew shellenv)"

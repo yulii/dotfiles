@@ -7,8 +7,6 @@ SWD=$(cd $(dirname $0) && pwd)
 # trap
 trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 
-chmod 755 /usr/local/share
-
 ( sh $SWD/init/link-dotfiles.sh )
 
 # zsh
