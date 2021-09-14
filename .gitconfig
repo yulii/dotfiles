@@ -35,7 +35,7 @@
   cancel-commit = reset --soft HEAD^
 
   # Clean branches
-  frozen-branch  = "!f(){ echo 'master'; }; f"
+  frozen-branch  = "!f(){ echo 'main'; }; f"
   clean-branches = "!f(){ git branch --merged | grep -v '^*' | grep -v $(git frozen-branch) | xargs git branch -d; git fetch --prune; }; f"
   clean-files    = clean -fd
 
