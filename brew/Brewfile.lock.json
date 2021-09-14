@@ -2,19 +2,19 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "244bfa18b23948404fc2ee4253eb232053034212"
+        "revision": "88fb6ec84d608b186780ab42bae83e5787816da1"
       },
       "homebrew/cask": {
-        "revision": "fb58cd3e2be4fc7648d1cd6166c98f7f144b0c8d"
+        "revision": "51f858fec16a1f3bb7a2e8099c9cfa7c8e633e68"
       },
       "homebrew/core": {
-        "revision": "eb2ac1e548a602a46b315e8c563272a7a40a6bbd"
+        "revision": "a3d1c526759bfd671e92c65138ceb3e9943b9f80"
       },
       "heroku/brew": {
         "revision": "ce8029690ca0a114882861d865f787e83ec04936"
       },
       "homebrew/cask-versions": {
-        "revision": "77e7099eefab7f8c804d32c35c6a7d6ce04b4799"
+        "revision": "db4c60979d9c8847b8cb1207b6f72fdb04a62ff0"
       }
     },
     "brew": {
@@ -856,13 +856,13 @@
         }
       },
       "docker": {
-        "version": "4.0.0,67817",
+        "version": "4.0.1,68347",
         "options": {
           "full_name": "docker"
         }
       },
       "google-chrome": {
-        "version": "93.0.4577.63",
+        "version": "93.0.4577.82",
         "options": {
           "full_name": "google-chrome"
         }
@@ -899,6 +899,12 @@
         "options": {
           "full_name": "app-cleaner"
         }
+      },
+      "zoom": {
+        "version": "5.7.6.1320",
+        "options": {
+          "full_name": "zoom"
+        }
       }
     }
   },
@@ -923,7 +929,7 @@
       "big_sur": {
         "HOMEBREW_VERSION": "3.2.11",
         "HOMEBREW_PREFIX": "/opt/homebrew",
-        "Homebrew/homebrew-core": "eb2ac1e548a602a46b315e8c563272a7a40a6bbd",
+        "Homebrew/homebrew-core": "a3d1c526759bfd671e92c65138ceb3e9943b9f80",
         "CLT": "12.5.1.0.1.1623191612",
         "Xcode": "12.5",
         "macOS": "11.5.2"
