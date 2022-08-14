@@ -23,4 +23,5 @@ list-brew-uses:  ## List all installed formulae along with the number of formula
 	brew list | xargs -P$(MAX_PROCS) -I{} sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 
 setup:  ## Run initial setup only once!
+	./configure.sh
 	ls -d $(PWD)/.atom/* | xargs -I{} ln -nfs {} $(HOME)/.atom
