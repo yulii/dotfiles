@@ -9,19 +9,15 @@ help:
 
 dump:  ## Export installed packages list
 	brew bundle dump --file=$(BREW_FILE) --force
-	apm list --installed --bare > $(ATOM_PACKAGES_FILE)
 
 install:
 	brew bundle --file=$(BREW_FILE)
-	apm install --packages-file $(ATOM_PACKAGES_FILE)
 
 upgrade:
 	brew upgrade
-	apm upgrade
 
 list-brew-uses:  ## List all installed formulae along with the number of formulae being used.
 	brew list | xargs -P$(MAX_PROCS) -I{} sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 
 setup:  ## Run initial setup only once!
 	./configure.sh
-	ls -d $(PWD)/.atom/* | xargs -I{} ln -nfs {} $(HOME)/.atom

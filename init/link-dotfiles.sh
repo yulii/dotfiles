@@ -14,8 +14,6 @@ set -x
 cd $HOME
 
 ln -nfs $DOTFILES_PATH/.plex      .plex
-ln -nfs $DOTFILES_PATH/.bundle    .bundle
-ln -nfs $DOTFILES_PATH/.gemrc     .gemrc
 ln -nfs $DOTFILES_PATH/.gitconfig .gitconfig
 ln -nfs $DOTFILES_PATH/.npmrc     .npmrc
 ln -nfs $DOTFILES_PATH/.vimrc     .vimrc
