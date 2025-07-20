@@ -14,6 +14,12 @@
 - Files like `.env`, `credentials`, and `secrets` must be excluded from commits
 - If accidentally committed, must be completely removed from history
 
+## Implementation Rules
+- **MANDATORY**: Always present implementation plan to user BEFORE making any changes
+- **CONFIRM FIRST**: Explain what will be done and ask for user approval before proceeding
+- **NO AUTOMATIC CHANGES**: Do not modify, create, or delete any files without user approval
+- **PROACTIVE PLANNING**: Analyze requirements, create task list, and present approach for user review
+
 ## Git Branch Strategy
 - **Never commit directly to default branches (main/master/develop)**
 - Always create a feature branch before starting work
@@ -32,13 +38,18 @@
 
 ## CLAUDE File Update Guidelines
 
-**MANDATORY**: Output this checklist BEFORE any CLAUDE.md edit:
-```
-- [ ] Clarity: Are all instructions unambiguous?
-- [ ] Conciseness: Is there any redundant content to remove?
-- [ ] Order: Are sections arranged by importance?
-- [ ] Review: Does the entire file maintain coherence?
-```
+**RULE**: CLAUDE.md edits MUST start with checklist results (✅/❌) as FIRST output
 
-**REQUIRED**: Output check results (✅/❌) for each item
-**NO EXCEPTIONS**: Editing without checklist = violation
+**CHECKLIST**:
+- Clarity: Are all instructions unambiguous?
+- Conciseness: Is there any redundant content to remove?
+- Order: Are sections arranged by importance?
+- Review: Does the entire file maintain coherence?
+
+**NO EXCEPTIONS**: All edits require checklist first
+
+## Important Reminders
+- Do what has been asked; nothing more, nothing less
+- NEVER create files unless they're absolutely necessary for achieving your goal
+- ALWAYS prefer editing an existing file to creating a new one
+- NEVER proactively create documentation files (*.md) or README files unless explicitly requested
