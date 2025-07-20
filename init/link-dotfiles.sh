@@ -13,6 +13,7 @@ set -x
 
 cd $HOME
 
+ln -nfs $DOTFILES_PATH/.claude/config.md   .claude/config.md
 ln -nfs $DOTFILES_PATH/.plex      .plex
 ln -nfs $DOTFILES_PATH/.gitconfig .gitconfig
 ln -nfs $DOTFILES_PATH/.npmrc     .npmrc
