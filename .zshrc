@@ -12,7 +12,7 @@ SAVEHIST=1000000
 
 setopt auto_pushd
 
-fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=(/opt/homebrew/share/zsh-completions $fpath)
 
 setopt IGNORE_EOF
 setopt NO_FLOW_CONTROL
@@ -70,6 +70,6 @@ fi
 if [ -f .plex/alias.sh ]; then
   source .plex/alias.sh
 fi
-export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 
 alias updatedb='sudo /usr/libexec/locate.updatedb'

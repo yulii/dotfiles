@@ -1,6 +1,6 @@
 tap "heroku/brew"
 tap "leoafarias/fvm"
-brew "awscli"
+brew "awscli", args: ["build-from-source"]
 brew "glib"
 brew "cairo"
 brew "cocoapods"
