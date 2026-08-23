@@ -1,30 +1,22 @@
 #!/bin/sh
 set -eu
 
-CWD=$(pwd)
-SWD=$(cd $(dirname $0) && pwd)
+SWD=$(cd "$(dirname "$0")" && pwd)
 
 # trap
-trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
+trap 'printf "\nabort!\n" ; exit 1' 1 2 3 15
 
-DOTFILES_PATH=$(dirname $SWD)
+DOTFILES_PATH=$(dirname "$SWD")
 
-set -x
+# init/links is the single list of what gets linked.
+# test/repo.sh and test/env.sh read the same file.
 
-cd $HOME
-
-mkdir -p .claude
-
-ln -nfs $DOTFILES_PATH/claude/CLAUDE.md      .claude/CLAUDE.md
-ln -nfs $DOTFILES_PATH/claude/settings.json  .claude/settings.json
-ln -nfs $DOTFILES_PATH/.plex      .plex
-ln -nfs $DOTFILES_PATH/.gitconfig .gitconfig
-ln -nfs $DOTFILES_PATH/.gitignore_global .gitignore_global
-ln -nfs $DOTFILES_PATH/.npmrc     .npmrc
-ln -nfs $DOTFILES_PATH/.vimrc     .vimrc
-ln -nfs $DOTFILES_PATH/.zprofile  .zprofile
-ln -nfs $DOTFILES_PATH/.zshrc     .zshrc
-
-set +x
+# The || keeps the last entry when the file has no trailing newline.
+while read -r src dst || [ -n "${src:-}" ]; do
+  case "$src" in '' | '#'*) continue ;; esac
+  mkdir -p "$(dirname "$HOME/$dst")"
+  ln -nfs "$DOTFILES_PATH/$src" "$HOME/$dst"
+  printf 'linked %s -> %s\n' "$dst" "$src"
+done <"$SWD/links"
 
 exit 0

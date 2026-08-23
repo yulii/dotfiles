@@ -1,0 +1,10 @@
+# source (in this repository)   destination (under $HOME)
+claude/CLAUDE.md .claude/CLAUDE.md
+claude/settings.json .claude/settings.json
+.plex .plex
+.gitconfig .gitconfig
+.gitignore_global .gitignore_global
+.npmrc .npmrc
+.vimrc .vimrc
+.zprofile .zprofile
+.zshrc .zshrc
