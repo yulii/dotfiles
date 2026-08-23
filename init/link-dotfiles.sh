@@ -13,9 +13,13 @@ set -x
 
 cd $HOME
 
-ln -nfs $DOTFILES_PATH/.claude/CLAUDE.md   .claude/CLAUDE.md
+mkdir -p .claude
+
+ln -nfs $DOTFILES_PATH/claude/CLAUDE.md      .claude/CLAUDE.md
+ln -nfs $DOTFILES_PATH/claude/settings.json  .claude/settings.json
 ln -nfs $DOTFILES_PATH/.plex      .plex
 ln -nfs $DOTFILES_PATH/.gitconfig .gitconfig
+ln -nfs $DOTFILES_PATH/.gitignore_global .gitignore_global
 ln -nfs $DOTFILES_PATH/.npmrc     .npmrc
 ln -nfs $DOTFILES_PATH/.vimrc     .vimrc
 ln -nfs $DOTFILES_PATH/.zprofile  .zprofile

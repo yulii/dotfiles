@@ -1,0 +1,4 @@
+# The [secrets] section of .gitconfig stores the detection patterns
+# themselves, and they look like the secrets they match.
+# Allowed patterns are matched against "file:line:content", so no anchor.
+\.gitconfig:[0-9]+:  patterns =

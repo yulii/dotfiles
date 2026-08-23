@@ -9,6 +9,13 @@ trap 'echo -e "\nabort!" ; exit 1' 1 2 3 15
 
 ( sh $SWD/init/link-dotfiles.sh )
 
+# git-secrets
+# templatedir is declared in .gitconfig but the hooks are not part of it.
+# Install them once so new repositories pick them up on init/clone.
+
+[ -d "$HOME/.git-templates/git-secrets/hooks" ] || \
+  git secrets --install "$HOME/.git-templates/git-secrets"
+
 # zsh
 
 ZSH_PATH=$(which zsh)

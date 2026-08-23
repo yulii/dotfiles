@@ -5,6 +5,7 @@
   default = matching
 [core]
   editor = /usr/bin/vim
+  excludesfile = ~/.gitignore_global
 [include]
   path = .gitconfig.secret
 [alias]
@@ -49,9 +50,19 @@
   patterns = (A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}
   patterns = (\"|')?(AWS|aws|Aws)?_?(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)(\"|')?\\s*(:|=>|=)\\s*(\"|')?[A-Za-z0-9/\\+=]{40}(\"|')?
   patterns = (\"|')?(AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?(\"|')?\\s*(:|=>|=)\\s*(\"|')?[0-9]{4}\\-?[0-9]{4}\\-?[0-9]{4}(\"|')?
+  patterns = gh[pousr]_[A-Za-z0-9]{36}
+  patterns = github_pat_[A-Za-z0-9_]{22,}
+  patterns = xox[baprs]-[A-Za-z0-9-]{10,}
+  patterns = -----BEGIN [A-Z ]*PRIVATE KEY-----
   allowed = AKIAIOSFODNN7EXAMPLE
   allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [init]
   templatedir = ~/.git-templates/git-secrets
 [pull]
 	rebase = true
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential
