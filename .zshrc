@@ -70,6 +70,4 @@ fi
 if [ -f .plex/alias.sh ]; then
   source .plex/alias.sh
 fi
-export PATH=/usr/local/bin:$PATH
-
 alias updatedb='sudo /usr/libexec/locate.updatedb'

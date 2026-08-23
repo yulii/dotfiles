@@ -13,6 +13,13 @@ dump:  ## Export installed packages list
 install:
 	brew bundle --file=$(BREW_FILE)
 
+cleanup-check:  ## Show packages not in Brewfile (dry run)
+	brew bundle cleanup --file=$(BREW_FILE)
+
+colima-start:  ## Start colima with restricted mounts
+	colima start --arch aarch64 --vm-type vz --vz-rosetta \
+	  --mount $$HOME/projects:w
+
 upgrade:
 	brew upgrade
 
