@@ -42,11 +42,12 @@ else
   ng ".gitconfig parses"
 fi
 
-if jq -e . claude/settings.json >/dev/null 2>&1; then
-  ok "settings.json parses"
-else
-  ng "settings.json parses"
-fi
+# Both settings files matter, so name them by path. claude/settings.json is
+# the global settings, and .claude/settings.json arms the sandbox for this
+# repository: a broken sandbox block fails the session before it starts.
+for f in claude/settings.json .claude/settings.json; do
+  if jq -e . "$f" >/dev/null 2>&1; then ok "$f parses"; else ng "$f parses"; fi
+done
 
 # A missing trailing newline used to drop the last entry silently
 if [ -z "$(tail -c1 init/links)" ]; then

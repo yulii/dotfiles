@@ -2,7 +2,8 @@
   "sandbox": {
     "network": {
       "allowedDomains": [
-        "formulae.brew.sh"
+        "formulae.brew.sh",
+        "analytics.brew.sh"
       ]
     },
     "filesystem": {
@@ -10,10 +11,5 @@
         "~/Library/Caches/Homebrew"
       ]
     }
-  },
-  "permissions": {
-    "allow": [
-      "WebFetch(domain:analytics.brew.sh)"
-    ]
   }
 }

@@ -10,6 +10,7 @@
 混同しやすい対。
 
 - `CLAUDE.md`（dotfiles 専用）と `claude/CLAUDE.md`（全プロジェクト共通）
+- `.claude/settings.json`（dotfiles 専用）と `claude/settings.json`（全プロジェクト共通）
 - `.gitignore`（このリポジトリ）と `.gitignore_global`（全リポジトリ）
 - `.git/hooks`（この clone）と `~/.git-templates`（今後 clone する全リポジトリ）
 - `test/`（dotfiles 自身のみ）と機械全体の状態
