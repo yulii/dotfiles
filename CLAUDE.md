@@ -15,6 +15,17 @@
 - `.git/hooks`（この clone）と `~/.git-templates`（今後 clone する全リポジトリ）
 - `test/`（dotfiles 自身のみ）と機械全体の状態
 
+# サンドボックス
+
+`claude/CLAUDE.md`、`claude/settings.json`、`.claude/settings.json` は Bash から書けない。Claude Code が自分の設定を守るため。編集は Edit ツール。
+
+git がこの 3 ファイルを書き換えようとすると途中で止まる。作業ツリーを書き換えない手順に置き換える。
+
+- `git reset --hard <ref>` ではなく `git reset <ref>`
+- 3 ファイル以外の差分は `git checkout -- <path>` で戻す
+- 3 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
+- `allowWrite`、`excludedCommands`、`skip-worktree` では解決しない。調査済み
+
 # コミット
 
 - `git commit` の前に必ず `make test` を実行する
