@@ -18,8 +18,10 @@ ok() { printf 'ok  %s\n' "$1"; }
 
 # File lists go through temporary files so that a path with a space
 # survives, and so the reading loops stay out of a subshell.
-scripts=$(mktemp)
-tracked=$(mktemp)
+# An argument-less mktemp ignores TMPDIR on macOS and reaches for a path the
+# Bash sandbox denies, so name the template under TMPDIR explicitly.
+scripts=$(mktemp "${TMPDIR:-/tmp}/repo-scripts.XXXXXX")
+tracked=$(mktemp "${TMPDIR:-/tmp}/repo-tracked.XXXXXX")
 trap 'rm -f "$scripts" "$tracked"' EXIT
 
 git ls-files '*.sh' >"$scripts"

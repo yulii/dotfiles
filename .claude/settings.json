@@ -1,0 +1,19 @@
+{
+  "sandbox": {
+    "network": {
+      "allowedDomains": [
+        "formulae.brew.sh"
+      ]
+    },
+    "filesystem": {
+      "allowWrite": [
+        "~/Library/Caches/Homebrew"
+      ]
+    }
+  },
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:analytics.brew.sh)"
+    ]
+  }
+}
