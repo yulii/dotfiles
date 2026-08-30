@@ -1,5 +1,6 @@
 {
   "autoMemoryEnabled": false,
+  "language": "japanese",
   "sandbox": {
     "enabled": true,
     "failIfUnavailable": true,
@@ -16,11 +17,12 @@
   },
   "permissions": {
     "allow": [
-      "Bash(done)",
       "Bash(git checkout:*)",
-      "Bash(gh pr:*)",
-      "Bash(make:*)",
-      "Bash(docker:*)"
+      "Bash(gh pr create:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(make:*)"
     ],
     "deny": [
       "Bash(git push --force*)",
