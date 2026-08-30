@@ -44,7 +44,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+push' && printf '%s' \"$c\" | grep -Eq '(^|[[:space:]])(-f|--force|--force-with-lease|--force-if-includes)([=[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git push の force 系オプションは禁止。リモートを巻き戻すおそれがあるため、必要なら人が手で実行する。\"}}'; exit 0",
+            "if": "Bash(git *)",
+            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | tr ';|&' '\\n' | grep -E 'git[[:space:]]+push' | grep -Eq '(^|[[:space:]])(-f|--force|--force-with-lease|--force-if-includes)([=[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git push の force 系オプションは禁止。リモートを巻き戻すおそれがあるため、必要なら人が手で実行する。\"}}'; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。git secrets --scan --cached で確認し、誤検知なら .gitallowed に追加する。\"}}'; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "c=\" $(jq -r '.tool_input.command // \"\"')\"; m() { printf '%s' \"$c\" | grep -Eq -e \"$1\"; }; { m 'git[[:space:]]+reset([[:space:]]|$).*--hard' || m 'git[[:space:]]+checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m 'git[[:space:]]+(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m 'git[[:space:]]+clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m 'git[[:space:]]+restore([[:space:]]|$)' && { ! m '\\-\\-staged' || m '\\-\\-worktree'; }; }; } && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; exit 0",
             "timeout": 10
           }
         ]
