@@ -1,4 +1,10 @@
 {
+  "autoMemoryEnabled": false,
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowUnsandboxedCommands": false
+  },
   "permissions": {
     "allow": [
       "Bash(done)",

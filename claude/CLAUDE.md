@@ -11,8 +11,7 @@
 
 # Memory
 
-- Write permanent conventions in CLAUDE.md, not in memory
-- Report the content after saving, updating, or deleting
+- Do not use memory. Write conventions in CLAUDE.md
 
 # Security
 

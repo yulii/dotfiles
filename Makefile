@@ -1,6 +1,7 @@
 ATOM_PACKAGES_FILE := ./atom/packages.list
 BREW_FILE := ./brew/Brewfile
-MAX_PROCS := $(shell sysctl -n hw.ncpu | xargs -I{} expr {} - 1 || printf 1)
+# sysctl is denied inside the Bash sandbox, so ask getconf instead.
+MAX_PROCS := $(shell getconf _NPROCESSORS_ONLN | xargs -I{} expr {} - 1 || printf 1)
 
 # test collides with the test/ directory, so every target is declared here.
 .PHONY: help dump install cleanup-check colima-start upgrade test test-env \
