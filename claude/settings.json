@@ -6,6 +6,18 @@
     "failIfUnavailable": true,
     "allowUnsandboxedCommands": false,
     "enableWeakerNetworkIsolation": true,
+    "excludedCommands": [
+      "git pull *",
+      "git merge *",
+      "git checkout *",
+      "git switch *",
+      "git rebase *",
+      "git stash *",
+      "git cherry-pick *",
+      "git reset *",
+      "gh pr checkout *",
+      "gh repo sync *"
+    ],
     "network": {
       "allowedDomains": [
         "github.com",
