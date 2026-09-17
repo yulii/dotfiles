@@ -24,7 +24,17 @@ git がこの 3 ファイルを書き換えようとすると途中で止まる�
 - `git reset --hard <ref>` ではなく `git reset <ref>`
 - 3 ファイル以外の差分は `git checkout -- <path>` で戻す
 - 3 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
-- `allowWrite`、`excludedCommands`、`skip-worktree` では解決しない。調査済み
+- `allowWrite`、`skip-worktree` では解決しない。調査済み
+
+`excludedCommands` は効くが、このリポジトリでは自己無効化する。`claude/settings.json` の `sandbox` に git と gh のワーキングツリー書き換え系を置いた。
+
+- 除外したコマンドは protected paths も書き換えられる。`git stash push` で確認済み
+- `"git pull *"` は `git pull origin main` にマッチする。書式は確認済み
+- ただし設定の置き場所が、git の書き換え対象そのもの
+- `claude/settings.json` を別の版に戻す操作は、その時点で除外設定を消す
+- 続くコマンドはサンドボックス内で走り、`unable to unlink old` で止まる
+- `git stash push` は通り `git stash pop` が落ちた。この非対称がその証拠
+- よって上の手順は引き続き必要。`excludedCommands` は他リポジトリ向けの保険
 
 # コミット
 
