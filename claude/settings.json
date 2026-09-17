@@ -1,5 +1,6 @@
 {
   "autoMemoryEnabled": false,
+  "agentPushNotifEnabled": true,
   "language": "japanese",
   "sandbox": {
     "enabled": true,
