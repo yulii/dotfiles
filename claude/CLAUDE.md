@@ -61,6 +61,9 @@ Targets define what may run without confirmation.
 - Use HTTPS remotes; the gh credential helper handles authentication
 - `git@` remotes fail: the key has a passphrase and the sandbox drops SSH
 - `failed to store: 100001` on fetch is a keychain write failure, not a transfer failure
+- The sandbox blocks writes to `.git/config`
+- Push with `git push origin HEAD`, never with `-u` or `--set-upstream`
+- `git pull` without arguments fails without an upstream; name the remote and branch
 - Use the `gh` command to reference Issues and PRs
 - Do not open GitHub URLs with WebFetch
 

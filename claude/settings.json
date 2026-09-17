@@ -16,8 +16,11 @@
       "git stash *",
       "git cherry-pick *",
       "git reset *",
+      "git branch *",
+      "git remote *",
       "gh pr checkout *",
-      "gh repo sync *"
+      "gh repo sync *",
+      "gh repo set-default *"
     ],
     "network": {
       "allowedDomains": [
