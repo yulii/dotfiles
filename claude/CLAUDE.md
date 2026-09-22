@@ -24,6 +24,7 @@
 - Present a plan and get approval before making changes
 - Never create, modify, or delete files without approval
 - Confirm before starting when the judgment could go either way
+- Do not launch or script local GUI apps (browsers, osascript) to verify output
 
 # Bash
 
