@@ -73,6 +73,9 @@ Targets define what may run without confirmation.
 - Push with `git push origin HEAD`, never with `-u` or `--set-upstream`
 - `git pull` without arguments fails without an upstream; name the remote and branch
 - Use the `gh` command to reference Issues and PRs
+- After merging a PR, always do these without asking
+  - Switch to the default branch and pull it
+  - Delete the merged local branches with `git branch -d`
 - Do not open GitHub URLs with WebFetch
 
 # Rule Precedence
