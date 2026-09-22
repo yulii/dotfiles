@@ -34,6 +34,8 @@
   "permissions": {
     "allow": [
       "Bash(git checkout:*)",
+      "Bash(git switch:*)",
+      "Bash(git pull:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr list:*)",
