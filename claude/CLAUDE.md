@@ -27,6 +27,9 @@
 
 # Bash
 
+- The shell is zsh, not bash
+  - Unquoted variables are not word-split; use arrays or `${=var}`
+  - Quote arguments containing `*`, `?`, `[`, or a leading `=`
 - Allow rules match each segment split by `|`, `;`, and `&&`
 - Wrapping an allowed command in an unallowed one triggers a prompt
 - Narrow the output after running, not with `tail` or `head`
