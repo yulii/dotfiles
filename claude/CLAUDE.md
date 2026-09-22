@@ -21,8 +21,7 @@
 
 # Implementation
 
-- Present a plan and get approval before making changes
-- Never create, modify, or delete files without approval
+- Present a plan and get approval before creating, modifying, or deleting files
 - Confirm before starting when the judgment could go either way
 - Do not launch or script local GUI apps (browsers, osascript) to verify output
 
@@ -48,17 +47,14 @@ Targets define what may run without confirmation.
 
 ## Defining
 
-- Keep targets reversible, idempotent, and local for every argument value
-- Never define targets whose effect cannot be undone (deleting data, publishing, deploying)
+- Keep targets reversible, idempotent, and local for every argument value; never delete data, publish, or deploy
 - Never define a target that takes an arbitrary command string
 - Provide a read-only counterpart instead, named with a `-check` suffix
 - Do not add a target to avoid a permission prompt
 
 # Git Branch Strategy
 
-- Never commit directly to default branches (main/master/develop)
-- Create a branch before starting work
-- Apply this even to personal projects
+- Create a branch before starting work, even in personal projects; never commit to main/master/develop
 
 # GitHub Operations
 

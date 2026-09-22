@@ -31,22 +31,14 @@ sandbox の中の git がこれらを書き換えようとすると、途中で�
 
 `claude/settings.json` の `sandbox.excludedCommands` に、git と gh のワーキングツリー書き換え系を置いた。除外したコマンドは sandbox の外で走る。
 
-- 除外したコマンドは protected paths も書き換えられる。`git stash push`、`git switch` で確認済み
-- `"git pull *"` は `git pull origin main` にマッチする。書式は確認済み
+- 除外したコマンドは protected paths も書き換えられる。`git stash push`、`git switch`、単独の `git pull` で確認済み
 - 除外は単独で実行したときだけ効く。`git remote add` の `.git/config` 書き込みで確認済み
 
 | 書き方 | 走る場所 |
 |---|---|
-| `cd <dir> && git …` | sandbox の外。ただし allow ルールがあっても確認が出る |
 | `git … 2>&1` | sandbox の外 |
 | `git … \| cat` | sandbox の中 |
 | `git … && echo` | sandbox の中 |
-
-- 2026-09-22 の `git pull origin main 2>&1 | grep …` は、これで止まった
-- 以前は「settings.json を別の版に戻すと除外設定が消える」と説明していた。未確認
-  - 根拠は「`git stash push` は通り `git stash pop` が落ちた」こと
-  - `pop` がつながれていただけの可能性がある。当時のコマンドは残っていない
-  - 次に main を更新するとき、`git pull origin main` を単独で実行して確かめる
 
 # コミット
 

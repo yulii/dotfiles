@@ -33,28 +33,28 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git checkout:*)",
-      "Bash(git switch:*)",
-      "Bash(git pull:*)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git pull *)",
       "Bash(git branch -d *)",
-      "Bash(gh pr create:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(make:*)"
+      "Bash(gh pr create *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(make *)"
     ],
     "deny": [
       "Bash(osascript *)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "Bash(git push --delete*)",
-      "Bash(docker system prune:*)",
-      "Bash(docker volume prune:*)",
-      "Bash(docker push:*)",
-      "Bash(docker login:*)",
+      "Bash(docker system prune *)",
+      "Bash(docker volume prune *)",
+      "Bash(docker push *)",
+      "Bash(docker login *)",
       "Bash(docker -H*)",
       "Bash(docker --host*)",
-      "Bash(docker context use:*)"
+      "Bash(docker context use *)"
     ]
   },
   "hooks": {
