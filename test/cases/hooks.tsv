@@ -45,6 +45,22 @@ pass	git rm -q a.md
 pass	git rm --cached -r dir
 pass	git rm a-file.md
 
+# Force-deleting or overwriting a branch asks; git branch -d is allowed
+ask	git branch -D topic
+ask	git branch -d -f topic
+ask	git branch -d --force topic
+ask	git branch --delete --force topic
+ask	git branch -d -qf topic
+ask	git branch -df topic
+ask	git branch -d topic -D other
+ask	git branch -M old new
+pass	git branch -d topic
+pass	git branch --delete topic
+pass	git branch -d a b
+pass	git branch -d feature-fix
+pass	git branch --format=%(refname)
+pass	git branch -d topic && ls -f
+
 # A later command's -f belongs to that command
 pass	git rm a.md && ls -f
 pass	git rm a.md; rm -f x
