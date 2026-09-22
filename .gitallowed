@@ -2,3 +2,6 @@
 # themselves, and they look like the secrets they match.
 # Allowed patterns are matched against "file:line:content", so no anchor.
 \.gitconfig:[0-9]+:  patterns =
+
+# Test cases for the private key pattern, which must look like keys.
+test/cases/secrets\.tsv:[0-9]+:

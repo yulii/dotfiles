@@ -98,4 +98,7 @@ else
   ng "git secrets matched a tracked file"
 fi
 
+# Hook decisions and secret patterns, listed in test/cases
+sh test/cases.sh || fail=1
+
 exit $fail

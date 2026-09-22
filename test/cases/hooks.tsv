@@ -1,0 +1,39 @@
+# expect<TAB>command
+# expect: deny, ask, or pass. The strictest decision of all Bash hooks wins.
+# Leave out git commit: that hook scans the index of the current repository.
+
+# Force push is denied
+deny	git push --force origin HEAD
+deny	git push -f origin HEAD
+deny	git push --force-with-lease origin HEAD
+pass	git push origin HEAD
+
+# Discarding uncommitted changes asks
+ask	git reset --hard
+ask	git reset --hard HEAD~1
+pass	git reset HEAD~1
+ask	git checkout -- a.md
+ask	git checkout .
+pass	git checkout main
+ask	git switch -f main
+ask	git checkout --discard-changes main
+pass	git switch -c topic
+ask	git clean -f
+ask	git clean -fd
+pass	git clean -n
+ask	git restore a.md
+ask	git restore --staged --worktree a.md
+pass	git restore --staged a.md
+ask	git rm -f a.md
+ask	git rm -qf a.md
+ask	git rm --force a.md
+ask	git rm -r -f dir
+pass	git rm a.md
+pass	git rm -q a.md
+pass	git rm --cached -r dir
+pass	git rm a-file.md
+
+# A later command's -f belongs to that command
+pass	git rm a.md && ls -f
+pass	git rm a.md; rm -f x
+pass	git rm a.md | grep -f p
