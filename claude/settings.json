@@ -65,7 +65,7 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | tr ';|&' '\\n' | grep -E 'git[[:space:]]+push' | grep -Eq '(^|[[:space:]])(-f|--force|--force-with-lease|--force-if-includes)([=[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git push の force 系オプションは禁止。リモートを巻き戻すおそれがあるため、必要なら人が手で実行する。\"}}'; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -E \"$g\"'push([[:space:]]|$)' | grep -Eq -e '(^|[[:space:]])(-[a-zA-Z]*f[a-zA-Z]*|--force|--force-with-lease|--force-if-includes)([=[:space:]]|$)' -e '[[:space:]][+][^[:space:]]' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git push の force 系オプションは禁止。リモートを巻き戻すおそれがあるため、必要なら人が手で実行する。\"}}'; exit 0",
             "timeout": 10
           },
           {
@@ -77,13 +77,13 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "c=\" $(jq -r '.tool_input.command // \"\"')\"; m() { printf '%s' \"$c\" | grep -Eq -e \"$1\"; }; { m 'git[[:space:]]+reset([[:space:]]|$).*--hard' || m 'git[[:space:]]+checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m 'git[[:space:]]+(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m 'git[[:space:]]+clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m 'git[[:space:]]+restore([[:space:]]|$)' && { ! m '\\-\\-staged' || m '\\-\\-worktree'; }; } || m 'git[[:space:]]+rm([[:space:]]+[^;&|]*)?[[:space:]](-f|--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m \"$g\"'(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
             "timeout": 10
           },
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "c=\" $(jq -r '.tool_input.command // \"\"')\"; printf '%s' \"$c\" | grep -Eq -e 'git[[:space:]]+branch([[:space:]]+[^;&|]*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq -e \"$g\"'branch([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
             "timeout": 10
           }
         ]
