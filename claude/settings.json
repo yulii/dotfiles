@@ -36,6 +36,7 @@
       "Bash(git checkout:*)",
       "Bash(git switch:*)",
       "Bash(git pull:*)",
+      "Bash(git branch -d *)",
       "Bash(gh pr create:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr list:*)",
@@ -77,6 +78,12 @@
             "type": "command",
             "if": "Bash(git *)",
             "command": "c=\" $(jq -r '.tool_input.command // \"\"')\"; m() { printf '%s' \"$c\" | grep -Eq -e \"$1\"; }; { m 'git[[:space:]]+reset([[:space:]]|$).*--hard' || m 'git[[:space:]]+checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m 'git[[:space:]]+(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m 'git[[:space:]]+clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m 'git[[:space:]]+restore([[:space:]]|$)' && { ! m '\\-\\-staged' || m '\\-\\-worktree'; }; } || m 'git[[:space:]]+rm([[:space:]]+[^;&|]*)?[[:space:]](-f|--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "c=\" $(jq -r '.tool_input.command // \"\"')\"; printf '%s' \"$c\" | grep -Eq -e 'git[[:space:]]+branch([[:space:]]+[^;&|]*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
             "timeout": 10
           }
         ]
