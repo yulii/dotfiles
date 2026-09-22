@@ -10,7 +10,17 @@ deny	git push --force-with-lease=main origin HEAD
 deny	git push --force-if-includes origin HEAD
 deny	git push origin HEAD -f
 deny	git status && git push -f origin HEAD
+deny	git push -qf origin HEAD
+deny	git push origin +main
+deny	git push origin +HEAD:main
+deny	git -C sub push -f origin HEAD
+deny	git -c core.x=y push --force origin HEAD
+deny	git --git-dir=.git push -f origin HEAD
+deny	git --work-tree . push origin +main
 pass	git push origin HEAD
+pass	git push -q origin HEAD
+pass	git push origin HEAD:main
+pass	git -C sub push origin HEAD
 pass	git push origin HEAD && ls -f
 
 # Discarding uncommitted changes asks
@@ -45,6 +55,21 @@ pass	git rm -q a.md
 pass	git rm --cached -r dir
 pass	git rm a-file.md
 
+# Global options before the subcommand do not hide it
+ask	git -C sub reset --hard
+ask	git -C sub rm -f a.md
+ask	git -c core.x=y checkout -- a.md
+ask	git --git-dir=.git --work-tree=. restore a.md
+ask	git --work-tree . clean -f
+pass	git -C sub status
+pass	git -C sub checkout main
+pass	git -c core.x=y reset HEAD~1
+
+# restore: -S and -W are --staged and --worktree
+ask	git restore -S -W a.md
+ask	git restore -SW a.md
+pass	git restore -S a.md
+
 # Force-deleting or overwriting a branch asks; git branch -d is allowed
 ask	git branch -D topic
 ask	git branch -d -f topic
@@ -60,8 +85,13 @@ pass	git branch -d a b
 pass	git branch -d feature-fix
 pass	git branch --format=%(refname)
 pass	git branch -d topic && ls -f
+ask	git -C sub branch -D topic
+ask	git -c core.x=y branch -M old new
+pass	git -C sub branch -d topic
 
 # A later command's -f belongs to that command
 pass	git rm a.md && ls -f
 pass	git rm a.md; rm -f x
 pass	git rm a.md | grep -f p
+pass	git checkout main && ls ..
+pass	git restore --staged a.md && git status
