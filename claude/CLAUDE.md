@@ -21,8 +21,7 @@
 
 # Implementation
 
-- Present a plan and get approval before making changes
-- Never create, modify, or delete files without approval
+- Present a plan and get approval before creating, modifying, or deleting files
 - Confirm before starting when the judgment could go either way
 - Do not launch or script local GUI apps (browsers, osascript) to verify output
 
@@ -31,13 +30,9 @@
 - Allow rules match each segment split by `|`, `;`, and `&&`
 - Wrapping an allowed command in an unallowed one triggers a prompt
 - Narrow the output after running, not with `tail` or `head`
-- Commands in `sandbox.excludedCommands` run outside the sandbox only when run alone
-  - A pipe or `&&` to another command runs the whole line inside the sandbox
-  - A leading `cd <dir> &&` and redirections such as `2>&1` are fine
-  - For read-only git, use commands that stay in the sandbox
-    - Current branch: `git rev-parse --abbrev-ref HEAD`
-    - Remote URLs: `git config --get-regexp '^remote\..*\.url'`
-    - Branch list: `git for-each-ref --format='%(refname:short)' refs/heads`
+- The shell starts in the working directory; never add `cd <dir> &&` or `git -C` (`cd` with git forces a prompt)
+- Run commands in `sandbox.excludedCommands` alone; a pipe or `&&` puts them back in the sandbox
+- For read-only git, use sandboxed forms: `git rev-parse --abbrev-ref HEAD`, `git config --get-regexp '^remote\..*\.url'`, `git for-each-ref refs/heads`
 
 # Makefile
 
@@ -52,17 +47,14 @@ Targets define what may run without confirmation.
 
 ## Defining
 
-- Keep targets reversible, idempotent, and local for every argument value
-- Never define targets whose effect cannot be undone (deleting data, publishing, deploying)
+- Keep targets reversible, idempotent, and local for every argument value; never delete data, publish, or deploy
 - Never define a target that takes an arbitrary command string
 - Provide a read-only counterpart instead, named with a `-check` suffix
 - Do not add a target to avoid a permission prompt
 
 # Git Branch Strategy
 
-- Never commit directly to default branches (main/master/develop)
-- Create a branch before starting work
-- Apply this even to personal projects
+- Create a branch before starting work, even in personal projects; never commit to main/master/develop
 
 # GitHub Operations
 
