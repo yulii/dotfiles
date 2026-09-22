@@ -17,13 +17,16 @@
 
 # サンドボックス
 
-`claude/CLAUDE.md`、`claude/settings.json`、`.claude/settings.json` は Bash から書けない。Claude Code が自分の設定を守るため。編集は Edit ツール。
+次の 7 ファイルは Bash から書けない。編集は Edit ツール。
 
-git がこの 3 ファイルを書き換えようとすると途中で止まる。作業ツリーを書き換えない手順に置き換える。
+- `claude/CLAUDE.md`、`claude/settings.json`、`.claude/settings.json`。Claude Code が自分の設定を守るため
+- `.gitconfig`、`.zshrc`、`.zprofile`、`.plex`。理由は未確認。リンクの有無とは一致しない
+
+git がこれらを書き換えようとすると途中で止まる。`git pull` でも起きる。作業ツリーを書き換えない手順に置き換える。
 
 - `git reset --hard <ref>` ではなく `git reset <ref>`
-- 3 ファイル以外の差分は `git checkout -- <path>` で戻す
-- 3 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
+- 7 ファイル以外の差分は `git checkout -- <path>` で戻す
+- 7 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
 - `allowWrite`、`skip-worktree` では解決しない。調査済み
 
 `excludedCommands` は効くが、このリポジトリでは自己無効化する。`claude/settings.json` の `sandbox` に git と gh のワーキングツリー書き換え系を置いた。
