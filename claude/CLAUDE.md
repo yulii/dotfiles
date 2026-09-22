@@ -31,6 +31,9 @@
 - Allow rules match each segment split by `|`, `;`, and `&&`
 - Wrapping an allowed command in an unallowed one triggers a prompt
 - Narrow the output after running, not with `tail` or `head`
+- The shell already starts in the working directory; do not prefix commands with `cd <dir> &&`
+  - `cd` with `git` forces a permission prompt
+  - Do not use `git -C <dir>` either
 - Commands in `sandbox.excludedCommands` run outside the sandbox only when run alone
   - A pipe or `&&` to another command runs the whole line inside the sandbox
   - A leading `cd <dir> &&` and redirections such as `2>&1` are fine

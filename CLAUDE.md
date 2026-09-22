@@ -37,7 +37,7 @@ sandbox の中の git がこれらを書き換えようとすると、途中で�
 
 | 書き方 | 走る場所 |
 |---|---|
-| `cd <dir> && git …` | sandbox の外 |
+| `cd <dir> && git …` | sandbox の外。ただし allow ルールがあっても確認が出る |
 | `git … 2>&1` | sandbox の外 |
 | `git … \| cat` | sandbox の中 |
 | `git … && echo` | sandbox の中 |
