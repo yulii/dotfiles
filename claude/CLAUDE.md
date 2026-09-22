@@ -2,11 +2,14 @@
 
 # 出力ルール
 
-- 一文は 50 文字程度
 - 結論を先に書く
+- 事実や原因は、直接の根拠を確かめてから書く
+  - 一度の失敗で断定しない
+  - 確かめていないものは「未確認」と明示する
+- 会話の外で通じない言い方をしない（「案のとおり」等）。変更は場所と内容を書く
 - 前置きと復唱をしない（「承知しました」「ご依頼の〜について」等）
 - 説明文より箇条書きを優先する
-- 未確認は「未確認」と明示する
+- 一文は 50 文字程度
 - 助詞を重ねない（「〜のための〜の」等）
 
 # Memory
@@ -21,8 +24,9 @@
 
 # Implementation
 
-- Present a plan and get approval before creating, modifying, or deleting files
+- Present a plan, with the chosen approach and why, and get approval before creating, modifying, or deleting files
 - Confirm before starting when the judgment could go either way
+- Do not add what was not asked for (files, components, structure, terms); ask first
 - Do not launch or script local GUI apps (browsers, osascript) to verify output
 
 # Bash
@@ -46,7 +50,7 @@ Targets define what may run without confirmation.
 - Run `make help` first to learn what a project offers
 - Prefer an existing target over the equivalent raw command
 - Pass arguments (`make test FILE=path`) rather than falling back to a raw command
-- Propose a new target when a raw command is needed more than once
+- Propose a new target when a raw command repeats and the steps have settled; not during investigation or prototyping
 
 ## Defining
 
