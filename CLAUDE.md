@@ -22,22 +22,31 @@
 - `claude/CLAUDE.md`、`claude/settings.json`、`.claude/settings.json`。Claude Code が自分の設定を守るため
 - `.gitconfig`、`.zshrc`、`.zprofile`、`.plex`。理由は未確認。リンクの有無とは一致しない
 
-git がこれらを書き換えようとすると途中で止まる。`git pull` でも起きる。作業ツリーを書き換えない手順に置き換える。
+sandbox の中の git がこれらを書き換えようとすると、途中で止まる。止まったら、作業ツリーを書き換えない手順に切り替える。
 
 - `git reset --hard <ref>` ではなく `git reset <ref>`
 - 7 ファイル以外の差分は `git checkout -- <path>` で戻す
 - 7 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
 - `allowWrite`、`skip-worktree` では解決しない。調査済み
 
-`excludedCommands` は効くが、このリポジトリでは自己無効化する。`claude/settings.json` の `sandbox` に git と gh のワーキングツリー書き換え系を置いた。
+`claude/settings.json` の `sandbox.excludedCommands` に、git と gh のワーキングツリー書き換え系を置いた。除外したコマンドは sandbox の外で走る。
 
-- 除外したコマンドは protected paths も書き換えられる。`git stash push` で確認済み
+- 除外したコマンドは protected paths も書き換えられる。`git stash push`、`git switch` で確認済み
 - `"git pull *"` は `git pull origin main` にマッチする。書式は確認済み
-- ただし設定の置き場所が、git の書き換え対象そのもの
-- `claude/settings.json` を別の版に戻す操作は、その時点で除外設定を消す
-- 続くコマンドはサンドボックス内で走り、`unable to unlink old` で止まる
-- `git stash push` は通り `git stash pop` が落ちた。この非対称がその証拠
-- よって上の手順は引き続き必要。`excludedCommands` は他リポジトリ向けの保険
+- 除外は単独で実行したときだけ効く。`git remote add` の `.git/config` 書き込みで確認済み
+
+| 書き方 | 走る場所 |
+|---|---|
+| `cd <dir> && git …` | sandbox の外 |
+| `git … 2>&1` | sandbox の外 |
+| `git … \| cat` | sandbox の中 |
+| `git … && echo` | sandbox の中 |
+
+- 2026-09-22 の `git pull origin main 2>&1 | grep …` は、これで止まった
+- 以前は「settings.json を別の版に戻すと除外設定が消える」と説明していた。未確認
+  - 根拠は「`git stash push` は通り `git stash pop` が落ちた」こと
+  - `pop` がつながれていただけの可能性がある。当時のコマンドは残っていない
+  - 次に main を更新するとき、`git pull origin main` を単独で実行して確かめる
 
 # コミット
 
