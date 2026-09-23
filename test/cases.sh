@@ -56,9 +56,8 @@ $(cases test/cases/deny.tsv)
 EOF
 
 # WebFetch: a domain deny also denies the host to the sandbox. Check each rule
-# of the table, then every deny rule of the settings. Wildcards follow the
-# permissions docs: a bare * matches any host, a leading *. any subdomain, and
-# any other * one label.
+# of the table, then every deny rule of the settings. The sandbox honors a
+# bare * and a leading *. that excludes the apex; any other * has no effect.
 # shellcheck disable=SC2016 # $a, $r, $d are jq variables
 cuts='[.sandbox.network.allowedDomains[]? | ascii_downcase] as $a
   | $r | capture("^WebFetch\\(domain:(?<d>[^)]+)\\)").d | ascii_downcase
@@ -66,7 +65,7 @@ cuts='[.sandbox.network.allowedDomains[]? | ascii_downcase] as $a
   | select($a | any(
       if $d == "*" then true
       elif ($d | startswith("*.")) then endswith($d[1:])
-      else test("^" + ($d | gsub("\\."; "\\.") | gsub("\\*"; "[^.]+")) + "$")
+      else . == $d
       end))'
 while IFS="$tab" read -r expect rule; do
   if [ -n "$(jq -r --arg r "$rule" "$cuts" claude/settings.json)" ]; then got='cut'; else got='keep'; fi
