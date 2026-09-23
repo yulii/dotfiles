@@ -1,0 +1,17 @@
+# expect<TAB>command
+# expect: deny or pass, by the Bash() rules in permissions.deny of the global settings.
+# Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
+
+# GUI apps are not launched
+deny	open https://example.com
+deny	open -a Safari
+deny	osascript -e 'display dialog "x"'
+pass	openssl rand -hex 16
+
+# Upstream tracking writes .git/config, which the sandbox blocks
+deny	git push -u origin HEAD
+deny	git push --set-upstream origin HEAD
+deny	git push origin HEAD -u
+deny	git push origin HEAD --set-upstream
+pass	git push origin HEAD
+pass	git push origin feature-update

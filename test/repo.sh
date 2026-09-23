@@ -49,6 +49,13 @@ for f in claude/settings.json .claude/settings.json; do
   if jq -e . "$f" >/dev/null 2>&1; then ok "$f parses"; else ng "$f parses"; fi
 done
 
+# Auto memory stays off; the global CLAUDE.md no longer says so
+if jq -e '.autoMemoryEnabled == false' claude/settings.json >/dev/null; then
+  ok "auto memory off"
+else
+  ng "autoMemoryEnabled is not false in claude/settings.json"
+fi
+
 # A missing trailing newline used to drop the last entry silently
 if [ -z "$(tail -c1 init/links)" ]; then
   ok "init/links ends with a newline"

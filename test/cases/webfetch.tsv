@@ -1,0 +1,20 @@
+# expect<TAB>deny rule
+# expect: cut or keep, whether the rule denies a sandbox allowed domain of the
+# global settings. A WebFetch(domain:) deny also denies the host to the sandbox,
+# which honors only a bare * and a leading *. that excludes the apex.
+# https://code.claude.com/docs/en/sandboxing#network-isolation
+
+# An allowed domain, exactly or by a wildcard the sandbox honors, is cut
+cut	WebFetch(domain:github.com)
+cut	WebFetch(domain:GitHub.com)
+cut	WebFetch(domain:*)
+cut	WebFetch(domain:*.github.com)
+cut	WebFetch(domain:*.com)
+
+# Other domains, other wildcards, and the bare tool rule keep the sandbox as is
+keep	WebFetch(domain:example.com)
+keep	WebFetch(domain:notgithub.com)
+keep	WebFetch(domain:github.*)
+keep	WebFetch(domain:*.uploads.github.com)
+keep	WebFetch
+keep	Bash(curl *)
