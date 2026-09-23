@@ -12,10 +12,6 @@
 - 一文は 50 文字程度
 - 助詞を重ねない（「〜のための〜の」等）
 
-# Memory
-
-- Do not use memory. Write conventions in CLAUDE.md
-
 # Security
 
 - Never commit API keys, passwords, or tokens
@@ -28,6 +24,18 @@
 - Confirm before starting when the judgment could go either way
 - Do not add what was not asked for (files, components, structure, terms); ask first
 - Do not launch or script local GUI apps (browsers, osascript) to verify output
+
+# Enforcement
+
+Design fixes that hold without Claude's compliance; instruction text (CLAUDE.md, rules, skills) is the last resort.
+
+- Where text is tempting, for example
+  - A convention (naming, imports, layout): a lint rule
+  - A step order ("run X before Y"): a Make target that depends on X
+  - A repeated bug: a test that fails on it
+  - A command to allow or block: `settings.json` permissions
+- When text remains, say in the plan why no mechanism fits
+- A check stops listed cases, not the intent; delete text only when the cases cover the intent, and list what they miss
 
 # Bash
 
@@ -69,7 +77,7 @@ Targets define what may run without confirmation.
 - `git@` remotes fail: the key has a passphrase and the sandbox drops SSH
 - `failed to store: 100001` on fetch is a keychain write failure, not a transfer failure
 - The sandbox blocks writes to `.git/config`
-- Push with `git push origin HEAD`, never with `-u` or `--set-upstream`
+- Push with `git push origin HEAD`
 - `git pull` without arguments fails without an upstream; name the remote and branch
 - Use the `gh` command to reference Issues and PRs
 - After merging a PR, always do these without asking

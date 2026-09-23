@@ -1,0 +1,15 @@
+# expect<TAB>path
+# expect: ignored or tracked, by this repository's .gitignore_global.
+# The file applies to every repository; keep files that projects commit tracked.
+
+# Local env files are ignored at any depth
+ignored	.env
+ignored	app/.env
+ignored	.env.local
+
+# Files that projects commit stay tracked
+tracked	.env.example
+tracked	config/credentials.yml.enc
+tracked	config/credentials/production.yml.enc
+tracked	k8s/secrets/sealed-secret.yaml
+tracked	README.md

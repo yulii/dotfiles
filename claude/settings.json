@@ -46,8 +46,13 @@
     ],
     "deny": [
       "Bash(osascript *)",
+      "Bash(open *)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
+      "Bash(git push -u*)",
+      "Bash(git push * -u*)",
+      "Bash(git push --set-upstream*)",
+      "Bash(git push * --set-upstream*)",
       "Bash(git push --delete*)",
       "Bash(docker system prune *)",
       "Bash(docker volume prune *)",
