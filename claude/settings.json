@@ -94,6 +94,17 @@
           }
         ]
       }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-permission-request.sh",
+            "async": true
+          }
+        ]
+      }
     ]
   }
 }
