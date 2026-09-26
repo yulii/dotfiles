@@ -44,7 +44,10 @@ EOF
 # hooks must print nothing, or Claude Code may take the output as a decision.
 plog="$work/plog"
 jq -r '.hooks.PermissionRequest[]?.hooks[].command' claude/settings.json >"$plog"
-mkdir -p "$work/home/.claude"
+mkdir -p "$work/home/.claude/hooks"
+grep -E '^claude/hooks/' init/links | while read -r src dst; do
+  ln -s "$root/$src" "$work/home/$dst"
+done
 while IFS="$tab" read -r expect cmd; do
   out=
   while IFS= read -r h; do

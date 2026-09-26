@@ -8,3 +8,4 @@ claude/settings.json .claude/settings.json
 .vimrc .vimrc
 .zprofile .zprofile
 .zshrc .zshrc
+claude/hooks/log-permission-request.sh .claude/hooks/log-permission-request.sh

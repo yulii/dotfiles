@@ -100,8 +100,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -c '{time: (now | todate), cwd, session_id, tool_name, tool_input} | walk(if type == \"string\" then gsub(\"(?<k>[A-Za-z0-9_]*(_KEY|_PASSWORD|_SECRET|_TOKEN))=[^\\\\s\\\"\\\\x27;&|]+\"; \"\\(.k)=***\") | gsub(\"Bearer [^\\\\s\\\"\\\\x27;&|]+\"; \"Bearer ***\") else . end)' >> ~/.claude/permission-requests.jsonl; exit 0",
-            "timeout": 10
+            "command": "~/.claude/hooks/log-permission-request.sh",
+            "async": true
           }
         ]
       }
