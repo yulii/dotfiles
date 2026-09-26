@@ -45,8 +45,9 @@ for h in pre-commit commit-msg prepare-commit-msg; do
   fi
 done
 
-# Brewfile matches the machine
-if brew bundle check --file=./brew/Brewfile >/dev/null 2>&1; then
+# Brewfile matches the machine. Outdated packages still match; make upgrade
+# handles them.
+if brew bundle check --no-upgrade --file=./brew/Brewfile >/dev/null 2>&1; then
   ok "Brewfile in sync"
 else
   ng "Brewfile drifted from the machine"
