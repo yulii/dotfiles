@@ -1,0 +1,16 @@
+# expect<TAB>command
+# expect: tool_input.command as the PermissionRequest hook of the global
+# settings logs it. The hook must also print nothing.
+
+# Secret values are masked
+FOO_TOKEN=*** make up	FOO_TOKEN=abc make up
+API_KEY=*** DB_PASSWORD=*** make up	API_KEY=abc DB_PASSWORD=p@ss make up
+export APP_SECRET=***; make up	export APP_SECRET=xyz; make up
+curl -H "Authorization: Bearer ***" https://x	curl -H "Authorization: Bearer abc" https://x
+curl -H 'Authorization: Bearer ***' https://x	curl -H 'Authorization: Bearer abc' https://x
+
+# Other commands are logged as they are
+cd backend && git status	cd backend && git status
+git status	git status
+KEYBOARD=us ls	KEYBOARD=us ls
+TOKEN_TTL=60 make up	TOKEN_TTL=60 make up

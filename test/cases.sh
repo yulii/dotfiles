@@ -39,6 +39,32 @@ done <<EOF
 $(cases test/cases/hooks.tsv)
 EOF
 
+# Permission log: run every PermissionRequest hook of the global settings with
+# HOME in a scratch directory, then read back the last logged command. The
+# hooks must print nothing, or Claude Code may take the output as a decision.
+plog="$work/plog"
+jq -r '.hooks.PermissionRequest[]?.hooks[].command' claude/settings.json >"$plog"
+mkdir -p "$work/home/.claude"
+while IFS="$tab" read -r expect cmd; do
+  out=
+  while IFS= read -r h; do
+    out=$out$(jq -n --arg c "$cmd" \
+      '{session_id: "s", cwd: "/x", tool_name: "Bash", tool_input: {command: $c}}' |
+      HOME="$work/home" sh -c "$h")
+  done <"$plog"
+  log="$work/home/.claude/permission-requests.jsonl"
+  got=$( [ -f "$log" ] && tail -n 1 "$log" | jq -r '.tool_input.command' || true)
+  if [ "$got" != "$expect" ]; then
+    ng "permission-log $expect, got $got: $cmd"
+  elif [ -n "$out" ]; then
+    ng "permission-log printed $out: $cmd"
+  else
+    ok "permission-log $expect: $cmd"
+  fi
+done <<EOF
+$(cases test/cases/permission-log.tsv)
+EOF
+
 # Deny: match each command against the Bash() rules of permissions.deny as
 # shell globs.
 rules="$work/deny"
