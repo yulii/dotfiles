@@ -1,6 +1,7 @@
 # expect<TAB>command
-# expect: deny, ask, or pass. The strictest decision of all Bash hooks wins.
-# The hooks run in a scratch repository on the branch topic.
+# expect: deny, ask, allow, or pass. The strictest decision of all Bash hooks
+# wins. The hooks run in a scratch repository on the branch topic; test/cases.sh
+# says which of its branches have a merged pull request.
 # Leave out git commit: that hook scans the index of the current repository.
 
 # Force push is denied
@@ -119,6 +120,25 @@ pass	git branch -d topic && ls -f
 ask	git -C sub branch -D topic
 ask	git -c core.x=y branch -M old new
 pass	git -C sub branch -d topic
+
+# git branch -D alone is allowed when every branch is the head of a merged
+# pull request at the same commit
+allow	git branch -D merged
+allow	git branch -D merged merged
+allow	git branch -D feature/merged
+ask	git branch -D later
+ask	git branch -D unmerged
+ask	git branch -D ghfail
+ask	git branch -D nosuch
+ask	git branch -D merged unmerged
+ask	git branch -D merged && ls
+ask	git branch -D -f merged
+ask	git branch -f merged HEAD
+ask	git branch -M merged other
+ask	git branch -C merged other
+ask	git -C . branch -D merged
+ask	git branch -D 'merged'
+ask	git branch -D $b
 
 # A later command's -f belongs to that command
 pass	git rm a.md && ls -f

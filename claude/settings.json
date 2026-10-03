@@ -116,8 +116,8 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq -e \"$g\"'branch([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
-            "timeout": 10
+            "command": "~/.claude/hooks/guard-branch-delete.sh",
+            "timeout": 30
           },
           {
             "type": "command",
