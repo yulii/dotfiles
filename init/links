@@ -9,3 +9,4 @@ claude/settings.json .claude/settings.json
 .zprofile .zprofile
 .zshrc .zshrc
 claude/hooks/log-permission-request.sh .claude/hooks/log-permission-request.sh
+claude/hooks/guard-branch-delete.sh .claude/hooks/guard-branch-delete.sh

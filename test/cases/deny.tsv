@@ -15,3 +15,13 @@ deny	git push origin HEAD -u
 deny	git push origin HEAD --set-upstream
 pass	git push origin HEAD
 pass	git push origin feature-update
+
+# gh prints the keyring token. Plain text rules miss git credential fill,
+# security find-internet-password, and commands wrapped in a script
+deny	gh auth token
+deny	gh auth token --hostname github.com
+deny	gh auth status -t
+deny	gh auth status --show-token
+deny	gh auth status --hostname github.com -t
+pass	gh auth status
+pass	gh auth status --hostname github.com

@@ -22,6 +22,15 @@
       "gh repo sync *",
       "gh repo set-default *"
     ],
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.docker/config.json"
+      ]
+    },
     "network": {
       "allowedDomains": [
         "github.com",
@@ -33,8 +42,12 @@
   },
   "permissions": {
     "allow": [
+      "WebSearch",
       "WebFetch(domain:code.claude.com)",
-      "Bash(git checkout *)",
+      "Read(//private/tmp/claude-*/**)",
+      "Read(//tmp/claude-*/**)",
+      "Edit(//private/tmp/claude-*/**)",
+      "Edit(//tmp/claude-*/**)",
       "Bash(git switch *)",
       "Bash(git pull *)",
       "Bash(git branch -d *)",
@@ -44,7 +57,23 @@
       "Bash(gh pr diff *)",
       "Bash(make *)"
     ],
+    "ask": [
+      "Bash(gh pr merge*)",
+      "Bash(gh pr comment*)",
+      "Bash(gh pr review*)",
+      "Bash(gh pr edit*)",
+      "Bash(gh pr close*)",
+      "Bash(gh issue create*)",
+      "Bash(gh issue edit*)",
+      "Bash(gh issue comment*)",
+      "Bash(gh issue close*)"
+    ],
     "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.netrc)",
+      "Read(~/.docker/config.json)",
       "Bash(osascript *)",
       "Bash(open *)",
       "Bash(git push --force*)",
@@ -54,6 +83,8 @@
       "Bash(git push --set-upstream*)",
       "Bash(git push * --set-upstream*)",
       "Bash(git push --delete*)",
+      "Bash(gh auth token*)",
+      "Bash(gh auth status *-t*)",
       "Bash(docker system prune *)",
       "Bash(docker volume prune *)",
       "Bash(docker push *)",
@@ -83,13 +114,31 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m \"$g\"'(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'switch(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
             "timeout": 10
           },
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq -e \"$g\"'branch([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
+            "command": "~/.claude/hooks/guard-branch-delete.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); f=$(printf '%s\\n' \"$c\" | sed -n 1p); printf '%s' \"$f\" | grep -Eq '^[[:space:]]*(git[[:space:]]+commit|gh[[:space:]]+(pr|issue)[[:space:]]+(create|comment|edit|review))([[:space:]]|$)' && c=$(printf '%s' \"$f\" | sed -E \"s/'[^']*'//g; s/\\\"([^\\\"\\\\\\\\]|\\\\\\\\.)*\\\"//g; s/[\\\"'].*//\"); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq \"$g\"'checkout([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git checkout は使わない。git checkout <file> は未コミットの変更を確認なしに消す。ブランチの移動は git switch、作成は git switch -c、detached HEAD は git switch --detach、unstage は git restore --staged。変更を捨てるなら git restore <file>（確認が出る）。\"}}'; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do printf '%s' \" $l\" | grep -Eq \"$g\"'push([[:space:]]|$)' || continue; if printf '%s' \"$l\" | grep -Eq '^[[:space:]]*git[[:space:]]+push[[:space:]]+origin[[:space:]]+HEAD[[:space:]]*(2>)?[[:space:]]*$'; then case $(git symbolic-ref --short -q HEAD) in ''|main|master|develop) ;; *) continue ;; esac; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"外へ出す push。確認なしで通すのは、main・master・develop 以外のブランチからの git push origin HEAD だけ。\"}}'; break; done; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh *)",
+            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do l=\" $l\"; printf '%s' \"$l\" | grep -Eq '[[:space:]]gh[[:space:]]+api([[:space:]]|$)' || continue; m=$(printf '%s' \"$l\" | grep -Eo '[[:space:]](-X|--method)(=|[[:space:]]*)[A-Za-z]+' | sed -nE '$s/.*(-X|--method)(=|[[:space:]]*)//p' | tr '[:lower:]' '[:upper:]'); if [ -n \"$m\" ]; then [ \"$m\" = GET ] && continue; else printf '%s' \"$l\" | grep -Eq '[[:space:]](-[fF]|--field|--raw-field|--input)' || continue; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"GitHub に書き込む gh api。-X GET 以外のメソッドか、-X GET なしの -f・-F・--input は POST になる。\"}}'; break; done; exit 0",
             "timeout": 10
           }
         ]
