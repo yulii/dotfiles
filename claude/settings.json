@@ -48,7 +48,6 @@
       "Read(//tmp/claude-*/**)",
       "Edit(//private/tmp/claude-*/**)",
       "Edit(//tmp/claude-*/**)",
-      "Bash(git checkout *)",
       "Bash(git switch *)",
       "Bash(git pull *)",
       "Bash(git branch -d *)",
@@ -115,7 +114,7 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'checkout[[:space:]].*(--|\\.)([[:space:]]|$)' || m \"$g\"'(checkout|switch)(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'switch(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
             "timeout": 10
           },
           {
@@ -123,6 +122,12 @@
             "if": "Bash(git *)",
             "command": "~/.claude/hooks/guard-branch-delete.sh",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); f=$(printf '%s\\n' \"$c\" | sed -n 1p); printf '%s' \"$f\" | grep -Eq '^[[:space:]]*(git[[:space:]]+commit|gh[[:space:]]+(pr|issue)[[:space:]]+(create|comment|edit|review))([[:space:]]|$)' && c=$(printf '%s' \"$f\" | sed -E \"s/'[^']*'//g; s/\\\"([^\\\"\\\\\\\\]|\\\\\\\\.)*\\\"//g; s/[\\\"'].*//\"); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq \"$g\"'checkout([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git checkout は使わない。git checkout <file> は未コミットの変更を確認なしに消す。ブランチの移動は git switch、作成は git switch -c、detached HEAD は git switch --detach、unstage は git restore --staged。変更を捨てるなら git restore <file>（確認が出る）。\"}}'; exit 0",
+            "timeout": 10
           },
           {
             "type": "command",
