@@ -18,16 +18,17 @@ trap 'rm -rf "$work"' EXIT
 cases() { grep -vE '^(#|$)' "$1"; }
 
 # Hooks: run every Bash PreToolUse hook of the global settings and keep the
-# strictest decision. They run in an empty directory, outside any repository.
+# strictest decision. They run in a scratch repository on the branch topic,
+# which has no commits.
 hooks="$work/hooks"
 jq -r '.hooks.PreToolUse[] | select(.matcher == "Bash") | .hooks[].command' \
   claude/settings.json >"$hooks"
-mkdir "$work/empty"
+git init -q -b topic "$work/topic"
 while IFS="$tab" read -r expect cmd; do
   got=pass
   while IFS= read -r h; do
     d=$(jq -n --arg c "$cmd" '{tool_input: {command: $c}}' |
-      (cd "$work/empty" && sh -c "$h") |
+      (cd "$work/topic" && sh -c "$h") |
       jq -r '.hookSpecificOutput.permissionDecision // empty' 2>/dev/null || true)
     case "$d:$got" in
       deny:*) got=deny ;;
@@ -68,21 +69,23 @@ done <<EOF
 $(cases test/cases/permission-log.tsv)
 EOF
 
-# Deny: match each command against the Bash() rules of permissions.deny as
-# shell globs.
-rules="$work/deny"
-jq -r '.permissions.deny[] | select(startswith("Bash(")) | .[5:-1]' \
-  claude/settings.json >"$rules"
-while IFS="$tab" read -r expect cmd; do
-  got=pass
-  while IFS= read -r r; do
-    # shellcheck disable=SC2254 # the rule is the glob
-    case "$cmd" in $r) got=deny ;; esac
-  done <"$rules"
-  if [ "$got" = "$expect" ]; then ok "deny $expect: $cmd"; else ng "deny $expect, got $got: $cmd"; fi
-done <<EOF
-$(cases test/cases/deny.tsv)
+# Deny and ask: match each command against the Bash() rules of
+# permissions.deny or permissions.ask as shell globs.
+for kind in deny ask; do
+  rules="$work/$kind"
+  jq -r --arg k "$kind" '.permissions[$k][]? | select(startswith("Bash(")) | .[5:-1]' \
+    claude/settings.json >"$rules"
+  while IFS="$tab" read -r expect cmd; do
+    got=pass
+    while IFS= read -r r; do
+      # shellcheck disable=SC2254 # the rule is the glob
+      case "$cmd" in $r) got=$kind ;; esac
+    done <"$rules"
+    if [ "$got" = "$expect" ]; then ok "$kind $expect: $cmd"; else ng "$kind $expect, got $got: $cmd"; fi
+  done <<EOF
+$(cases "test/cases/$kind.tsv")
 EOF
+done
 
 # WebFetch: a domain deny also denies the host to the sandbox. Check each rule
 # of the table, then every deny rule of the settings. The sandbox honors a

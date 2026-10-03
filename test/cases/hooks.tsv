@@ -1,5 +1,6 @@
 # expect<TAB>command
 # expect: deny, ask, or pass. The strictest decision of all Bash hooks wins.
+# The hooks run in a scratch repository on the branch topic.
 # Leave out git commit: that hook scans the index of the current repository.
 
 # Force push is denied
@@ -17,11 +18,41 @@ deny	git -C sub push -f origin HEAD
 deny	git -c core.x=y push --force origin HEAD
 deny	git --git-dir=.git push -f origin HEAD
 deny	git --work-tree . push origin +main
+
+# Only git push origin HEAD from a branch other than main, master, or
+# develop goes without asking. The scratch repository is on topic, so the
+# main side is not covered here.
 pass	git push origin HEAD
-pass	git push -q origin HEAD
-pass	git push origin HEAD:main
-pass	git -C sub push origin HEAD
+pass	git push origin HEAD 2>&1
 pass	git push origin HEAD && ls -f
+ask	git push
+ask	git push -q origin HEAD
+ask	git push origin HEAD:main
+ask	git push origin main
+ask	git push origin topic
+ask	git push upstream HEAD
+ask	git push --tags origin HEAD
+ask	git -C sub push origin HEAD
+ask	git status && git push origin main
+
+# gh api asks when it writes: a method other than GET, or fields without -X GET
+ask	gh api repos/o/r/issues -f title=x
+ask	gh api repos/o/r/issues -F title=x
+ask	gh api repos/o/r/issues --field title=x
+ask	gh api repos/o/r/issues --raw-field title=x
+ask	gh api repos/o/r/issues --input body.json
+ask	gh api -X POST repos/o/r/issues
+ask	gh api -XPOST repos/o/r/issues
+ask	gh api --method DELETE repos/o/r/git/refs/heads/x
+ask	gh api --method=patch repos/o/r
+ask	gh api graphql -f query='mutation { x }'
+ask	ls && gh api -X PUT repos/o/r/pulls/1/merge
+pass	gh api repos/o/r
+pass	gh api repos/o/r/pulls --jq '.[].number'
+pass	gh api -X GET search/code -f q=x
+pass	gh api --method GET search/code -F q=x
+pass	gh api 'repos/o/r/contents/a.go?ref=v1' --jq .content | base64 -d | grep -f p
+pass	gh pr view 1 -F x
 
 # Discarding uncommitted changes asks
 ask	git reset --hard

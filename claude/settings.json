@@ -53,6 +53,17 @@
       "Bash(gh pr diff *)",
       "Bash(make *)"
     ],
+    "ask": [
+      "Bash(gh pr merge*)",
+      "Bash(gh pr comment*)",
+      "Bash(gh pr review*)",
+      "Bash(gh pr edit*)",
+      "Bash(gh pr close*)",
+      "Bash(gh issue create*)",
+      "Bash(gh issue edit*)",
+      "Bash(gh issue comment*)",
+      "Bash(gh issue close*)"
+    ],
     "deny": [
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
@@ -106,6 +117,18 @@
             "type": "command",
             "if": "Bash(git *)",
             "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq -e \"$g\"'branch([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*[DMCf][a-zA-Z]*)([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ブランチを強制的に消す・上書きする操作。マージされていないコミットを失うおそれがある。\"}}'; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do printf '%s' \" $l\" | grep -Eq \"$g\"'push([[:space:]]|$)' || continue; if printf '%s' \"$l\" | grep -Eq '^[[:space:]]*git[[:space:]]+push[[:space:]]+origin[[:space:]]+HEAD[[:space:]]*(2>)?[[:space:]]*$'; then case $(git symbolic-ref --short -q HEAD) in ''|main|master|develop) ;; *) continue ;; esac; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"外へ出す push。確認なしで通すのは、main・master・develop 以外のブランチからの git push origin HEAD だけ。\"}}'; break; done; exit 0",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh *)",
+            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do l=\" $l\"; printf '%s' \"$l\" | grep -Eq '[[:space:]]gh[[:space:]]+api([[:space:]]|$)' || continue; m=$(printf '%s' \"$l\" | grep -Eo '[[:space:]](-X|--method)(=|[[:space:]]*)[A-Za-z]+' | sed -nE '$s/.*(-X|--method)(=|[[:space:]]*)//p' | tr '[:lower:]' '[:upper:]'); if [ -n \"$m\" ]; then [ \"$m\" = GET ] && continue; else printf '%s' \"$l\" | grep -Eq '[[:space:]](-[fF]|--field|--raw-field|--input)' || continue; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"GitHub に書き込む gh api。-X GET 以外のメソッドか、-X GET なしの -f・-F・--input は POST になる。\"}}'; break; done; exit 0",
             "timeout": 10
           }
         ]

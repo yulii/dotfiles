@@ -1,0 +1,23 @@
+# expect<TAB>command
+# expect: ask or pass, by the Bash() rules in permissions.ask of the global settings.
+# Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
+# git push and gh api are judged by hooks; see hooks.tsv.
+
+# Writing to a pull request or an issue asks
+ask	gh pr merge 12 --squash
+ask	gh pr merge
+ask	gh pr close
+ask	gh pr comment 12 --body x
+ask	gh pr review 12 --approve
+ask	gh pr edit 12 --title x
+ask	gh pr close 12
+ask	gh issue create --title x --body y
+ask	gh issue edit 3 --add-label bug
+ask	gh issue comment 3 --body x
+ask	gh issue close 3
+pass	gh pr create --title x --body y
+pass	gh pr view 12
+pass	gh pr list --state merged
+pass	gh pr checks 12
+pass	gh issue view 3
+pass	gh issue list
