@@ -42,7 +42,12 @@
   },
   "permissions": {
     "allow": [
+      "WebSearch",
       "WebFetch(domain:code.claude.com)",
+      "Read(//private/tmp/claude-*/**)",
+      "Read(//tmp/claude-*/**)",
+      "Edit(//private/tmp/claude-*/**)",
+      "Edit(//tmp/claude-*/**)",
       "Bash(git checkout *)",
       "Bash(git switch *)",
       "Bash(git pull *)",
