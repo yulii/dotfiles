@@ -68,6 +68,8 @@
       "Bash(git push --set-upstream*)",
       "Bash(git push * --set-upstream*)",
       "Bash(git push --delete*)",
+      "Bash(gh auth token*)",
+      "Bash(gh auth status *-t*)",
       "Bash(docker system prune *)",
       "Bash(docker volume prune *)",
       "Bash(docker push *)",
