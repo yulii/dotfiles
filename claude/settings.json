@@ -108,7 +108,7 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。git secrets --scan --cached で確認し、誤検知なら .gitallowed に追加する。\"}}'; exit 0",
+            "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。回避せずに止まり、git secrets --scan --cached の結果をユーザーに報告する。.gitallowed は自分で編集しない。\"}}'; exit 0",
             "timeout": 10
           },
           {

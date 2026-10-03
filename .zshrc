@@ -17,6 +17,8 @@ fpath=(/opt/homebrew/share/zsh-completions $fpath)
 setopt IGNORE_EOF
 setopt NO_FLOW_CONTROL
 setopt NO_BEEP
+# Claude Code: echo === would fail with "== not found"
+[[ -n $CLAUDECODE ]] && setopt NO_EQUALS
 
 bindkey '^o' history-beginning-search-backward-end
 bindkey '^r' history-incremental-pattern-search-backward
