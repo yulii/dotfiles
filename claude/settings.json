@@ -22,6 +22,15 @@
       "gh repo sync *",
       "gh repo set-default *"
     ],
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.docker/config.json"
+      ]
+    },
     "network": {
       "allowedDomains": [
         "github.com",
@@ -45,6 +54,11 @@
       "Bash(make *)"
     ],
     "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.netrc)",
+      "Read(~/.docker/config.json)",
       "Bash(osascript *)",
       "Bash(open *)",
       "Bash(git push --force*)",
