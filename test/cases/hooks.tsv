@@ -59,13 +59,7 @@ pass	gh pr view 1 -F x
 ask	git reset --hard
 ask	git reset --hard HEAD~1
 pass	git reset HEAD~1
-deny	git checkout -- a.md
-deny	git checkout .
-deny	git checkout main -- a.md
-deny	git checkout main
 ask	git switch -f main
-deny	git checkout -f main
-deny	git checkout --discard-changes main
 ask	git switch --discard-changes main
 pass	git switch -c topic
 ask	git clean -f
@@ -90,11 +84,9 @@ pass	git rm a-file.md
 # Global options before the subcommand do not hide it
 ask	git -C sub reset --hard
 ask	git -C sub rm -f a.md
-deny	git -c core.x=y checkout -- a.md
 ask	git --git-dir=.git --work-tree=. restore a.md
 ask	git --work-tree . clean -f
 pass	git -C sub status
-deny	git -C sub checkout main
 pass	git -c core.x=y reset HEAD~1
 
 # restore: -S and -W are --staged and --worktree
@@ -144,23 +136,17 @@ ask	git branch -D $b
 pass	git rm a.md && ls -f
 pass	git rm a.md; rm -f x
 pass	git rm a.md | grep -f p
-deny	git checkout main && ls ..
 pass	git restore --staged a.md && git status
 
-# git checkout is denied: git checkout <file> drops uncommitted changes.
-# git switch moves between branches, and git restore --staged unstages.
-deny	git checkout a.md
-deny	git checkout -b topic2
-deny	git checkout 62ca1ec
-deny	git status && git checkout a.md
-deny	git -C sub checkout a.md
+# git checkout is denied by permissions.deny (test/cases/deny.tsv), not by a
+# hook. git switch moves between branches, and git restore --staged unstages.
 pass	git switch main
 pass	git switch --detach 62ca1ec
 pass	gh pr checkout 12
 
-# Text of a commit message, a pull request, or an issue is not a command
+# Text that mentions a command is not a command
 pass	gh pr create --title x --body "use git switch; git checkout a.md is denied"
 pass	gh issue comment 3 --body "x; git checkout a.md"
 pass	git commit -m "x; git checkout a.md"
-deny	git commit -m x && git checkout a.md
-deny	git commit -m "x" -m 'y'; git checkout a.md
+pass	grep -n 'git checkout a.md' CLAUDE.md
+pass	git log -S'"git checkout *"'
