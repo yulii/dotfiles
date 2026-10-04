@@ -25,7 +25,7 @@
 sandbox の中の git がこれらを書き換えようとすると、途中で止まる。止まったら、作業ツリーを書き換えない手順に切り替える。
 
 - `git reset --hard <ref>` ではなく `git reset <ref>`
-- 7 ファイル以外の差分は `git restore <path>` で戻す。`git checkout` は hook が拒否する
+- 7 ファイル以外の差分は `git restore <path>` で戻す。`git checkout` は deny ルールが拒否する
 - 7 ファイルは `git show <ref>:<path>` を読み、Edit で合わせる
 - `allowWrite`、`skip-worktree` では解決しない。調査済み
 

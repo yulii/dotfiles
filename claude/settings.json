@@ -10,7 +10,6 @@
     "excludedCommands": [
       "git pull *",
       "git merge *",
-      "git checkout *",
       "git switch *",
       "git rebase *",
       "git stash *",
@@ -76,6 +75,8 @@
       "Read(~/.docker/config.json)",
       "Bash(osascript *)",
       "Bash(open *)",
+      "Bash(git checkout)",
+      "Bash(git checkout *)",
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "Bash(git push -u*)",
@@ -122,12 +123,6 @@
             "if": "Bash(git *)",
             "command": "~/.claude/hooks/guard-branch-delete.sh",
             "timeout": 30
-          },
-          {
-            "type": "command",
-            "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); f=$(printf '%s\\n' \"$c\" | sed -n 1p); printf '%s' \"$f\" | grep -Eq '^[[:space:]]*(git[[:space:]]+commit|gh[[:space:]]+(pr|issue)[[:space:]]+(create|comment|edit|review))([[:space:]]|$)' && c=$(printf '%s' \"$f\" | sed -E \"s/'[^']*'//g; s/\\\"([^\\\"\\\\\\\\]|\\\\\\\\.)*\\\"//g; s/[\\\"'].*//\"); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -Eq \"$g\"'checkout([[:space:]]|$)' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git checkout は使わない。git checkout <file> は未コミットの変更を確認なしに消す。ブランチの移動は git switch、作成は git switch -c、detached HEAD は git switch --detach、unstage は git restore --staged。変更を捨てるなら git restore <file>（確認が出る）。\"}}'; exit 0",
-            "timeout": 10
           },
           {
             "type": "command",
