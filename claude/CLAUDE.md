@@ -29,6 +29,8 @@
 
 Design fixes that hold without Claude's compliance; instruction text (CLAUDE.md, rules, skills) is the last resort.
 
+- Add a mechanism only against harm: irreversible loss, outward effects, or secrets
+- For style or tool choice, add neither a mechanism nor text; denying the prompt is enough
 - Where text is tempting, for example
   - A convention (naming, imports, layout): a lint rule
   - A step order ("run X before Y"): a Make target that depends on X
