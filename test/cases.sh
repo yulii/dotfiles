@@ -72,18 +72,24 @@ EOF
 
 # Permission log: run every PermissionRequest hook of the global settings with
 # HOME in a scratch directory, then read back the last logged command. The
-# hooks must print nothing, or Claude Code may take the output as a decision.
+# suggested rule carries the same command and must be masked the same way.
+# The log is split by month, so read the newest file. The hooks must print
+# nothing, or Claude Code may take the output as a decision.
 plog="$work/plog"
 jq -r '.hooks.PermissionRequest[]?.hooks[].command' claude/settings.json >"$plog"
 while IFS="$tab" read -r expect cmd; do
   out=
   while IFS= read -r h; do
     out=$out$(jq -n --arg c "$cmd" \
-      '{session_id: "s", cwd: "/x", tool_name: "Bash", tool_input: {command: $c}}' |
+      '{session_id: "s", cwd: "/x", agent_type: "Explore", tool_name: "Bash", tool_input: {command: $c},
+        permission_suggestions: [{type: "addRules", rules: [{toolName: "Bash", ruleContent: $c}]}]}' |
       HOME="$work/home" sh -c "$h")
   done <"$plog"
-  log="$work/home/.claude/permission-requests.jsonl"
-  got=$( [ -f "$log" ] && tail -n 1 "$log" | jq -r '.tool_input.command' || true)
+  log=
+  for f in "$work"/home/.claude/permission-requests-*.jsonl; do [ -f "$f" ] && log=$f; done
+  got=$( [ -n "$log" ] && tail -n 1 "$log" |
+    jq -r 'if .agent_type == "Explore" and .permission_suggestions[0].rules[0].ruleContent == .tool_input.command
+      then .tool_input.command else "suggestion or agent_type differs" end' || true)
   if [ "$got" != "$expect" ]; then
     ng "permission-log $expect, got $got: $cmd"
   elif [ -n "$out" ]; then
