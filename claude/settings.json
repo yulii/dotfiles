@@ -155,7 +155,7 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do printf '%s' \" $l\" | grep -Eq \"$g\"'push([[:space:]]|$)' || continue; if printf '%s' \"$l\" | grep -Eq '^[[:space:]]*git[[:space:]]+push[[:space:]]+origin[[:space:]]+HEAD[[:space:]]*(2>)?[[:space:]]*$'; then case $(git symbolic-ref --short -q HEAD) in ''|main|master|develop) ;; *) continue ;; esac; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"外へ出す push。確認なしで通すのは、main・master・develop 以外のブランチからの git push origin HEAD だけ。\"}}'; break; done; exit 0",
+            "command": "~/.claude/hooks/guard-push.sh",
             "timeout": 10
           },
           {
