@@ -4,21 +4,24 @@
 # says which of its branches have a merged pull request.
 # Leave out git commit: that hook scans the index of the current repository.
 
-# Force push is denied
-deny	git push --force origin HEAD
-deny	git push -f origin HEAD
-deny	git push --force-with-lease origin HEAD
-deny	git push --force-with-lease=main origin HEAD
-deny	git push --force-if-includes origin HEAD
-deny	git push origin HEAD -f
-deny	git status && git push -f origin HEAD
-deny	git push -qf origin HEAD
-deny	git push origin +main
-deny	git push origin +HEAD:main
-deny	git -C sub push -f origin HEAD
-deny	git -c core.x=y push --force origin HEAD
-deny	git --git-dir=.git push -f origin HEAD
-deny	git --work-tree . push origin +main
+# Force push is denied by permissions.deny (deny.tsv). The hooks ask for it,
+# so the forms the rules miss still stop
+ask	git push --force origin HEAD
+ask	git push -f origin HEAD
+ask	git push --force-with-lease origin HEAD
+ask	git push --force-with-lease=main origin HEAD
+ask	git push --force-if-includes origin HEAD
+ask	git push origin HEAD -f
+ask	git status && git push -f origin HEAD
+ask	git push -qf origin HEAD
+ask	git push origin +main
+ask	git push origin +HEAD:main
+ask	git -C sub push -f origin HEAD
+ask	git -c core.x=y push --force origin HEAD
+ask	git --git-dir=.git push -f origin HEAD
+ask	git --work-tree . push origin +main
+# The hooks do not parse quotes, so a push in a message also asks
+ask	git tag -a v1 -m "x; git push -f origin HEAD"
 
 # Only git push origin HEAD from a branch other than main, master, or
 # develop goes without asking. The scratch repository is on topic, so the
