@@ -16,8 +16,8 @@ deny	git push origin HEAD --set-upstream
 pass	git push origin HEAD
 pass	git push origin feature-update
 
-# A force push rewrites the remote. The push hooks fail open, and a sandboxed
-# push runs without a prompt, so these rules stay. The hook also catches
+# A force push rewrites the remote. The push hook fails open, and a sandboxed
+# push runs without a prompt, so these rules deny it. The hook asks for
 # git push -qf and git -C sub push -f (hooks.tsv)
 deny	git push --force origin HEAD
 deny	git push -f origin HEAD

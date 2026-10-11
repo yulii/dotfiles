@@ -127,12 +127,6 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | grep -E \"$g\"'push([[:space:]]|$)' | grep -Eq -e '(^|[[:space:]])(-[a-zA-Z]*f[a-zA-Z]*|--force|--force-with-lease|--force-if-includes)([=[:space:]]|$)' -e '[[:space:]][+][^[:space:]]' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"git push の force 系オプションは禁止。リモートを巻き戻すおそれがあるため、必要なら人が手で実行する。\"}}'; exit 0",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "if": "Bash(git *)",
             "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。回避せずに止まり、git secrets --scan --cached の結果をユーザーに報告する。.gitallowed は自分で編集しない。\"}}'; exit 0",
             "timeout": 10
           },
