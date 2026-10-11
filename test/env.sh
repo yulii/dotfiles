@@ -53,4 +53,11 @@ else
   ng "Brewfile drifted from the machine"
 fi
 
+# hostinfo still prints the lines colima-start sizes the VM from
+if err=$(make -s -n colima-start 2>&1 >/dev/null); then
+  ok "hostinfo format for colima-start"
+else
+  ng "hostinfo format changed: $err"
+fi
+
 exit $fail
