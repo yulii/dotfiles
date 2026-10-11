@@ -174,4 +174,21 @@ done <<EOF
 $(cases test/cases/secrets.tsv)
 EOF
 
+# colima: put a hostinfo that prints the input ahead of PATH, then read the
+# --cpus and --memory values from make -n colima-start.
+mkdir -p "$work/bin"
+while IFS="$tab" read -r expect out; do
+  printf '#!/bin/sh\nprintf "%%b\\n" '\''%s'\''\n' "$out" >"$work/bin/hostinfo"
+  chmod +x "$work/bin/hostinfo"
+  if run=$(PATH="$work/bin:$PATH" make -s -n colima-start 2>/dev/null); then
+    got=$(printf '%s\n' "$run" | tr -s ' \\\n' '   ' |
+      sed -n 's/.*--cpus \([0-9]*\).*--memory \([0-9]*\).*/\1 \2/p')
+  else
+    got=error
+  fi
+  if [ "$got" = "$expect" ]; then ok "colima $expect: $out"; else ng "colima $expect, got $got: $out"; fi
+done <<EOF
+$(cases test/cases/colima.tsv)
+EOF
+
 exit $fail

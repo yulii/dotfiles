@@ -1,0 +1,24 @@
+# expect<TAB>hostinfo output, \n between lines
+# expect: "cpus memory" that make colima-start passes to colima, or error when
+# hostinfo lacks a line in the format it reads.
+# The VM takes half of the processors and a quarter of the memory, no less
+# than colima's default of 2.
+
+# The output of this machine, macOS 26
+4 4	Mach kernel version:\n\t Darwin Kernel Version 25.6.0: Fri Jul 31 19:17:12 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8103\nKernel configured for up to 8 processors.\n8 processors are physically available.\n8 processors are logically available.\nProcessor type: arm64e (ARM64E)\nProcessors active: 0 1 2 3 4 5 6 7\nPrimary memory available: 16.00 gigabytes\nDefault processor set: 570 tasks, 3687 threads, 8 processors\nLoad average: 1.45, Mach factor: 6.54
+
+# Larger machines scale, rounding down
+8 8	16 processors are logically available.\nPrimary memory available: 32.00 gigabytes
+5 4	10 processors are logically available.\nPrimary memory available: 18.00 gigabytes
+6 9	12 processors are logically available.\nPrimary memory available: 36.00 gigabytes
+
+# Small machines get the default
+2 2	4 processors are logically available.\nPrimary memory available: 8.00 gigabytes
+2 2	2 processors are logically available.\nPrimary memory available: 4.00 gigabytes
+
+# A changed format stops instead of falling back
+error	8 processors are logically available.
+error	Primary memory available: 16.00 gigabytes
+error	8 processors are logically available.\nPrimary memory available: 16384 megabytes
+error	8 logical processors are available.\nPrimary memory available: 16.00 gigabytes
+error	8 processors are logically available.\nTotal memory: 16.00 gigabytes

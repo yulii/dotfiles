@@ -2,6 +2,12 @@ ATOM_PACKAGES_FILE := ./atom/packages.list
 BREW_FILE := ./brew/Brewfile
 # sysctl is denied inside the Bash sandbox, so ask getconf instead.
 MAX_PROCS := $(shell getconf _NPROCESSORS_ONLN | xargs -I{} expr {} - 1 || printf 1)
+# The colima VM takes half of the processors and a quarter of the memory, no
+# less than colima's default of 2. Each is empty when hostinfo changes format.
+HOST_CPUS := $(shell hostinfo | awk '/^[0-9]+ processors are logically available\.$$/ {print $$1}')
+HOST_MEMORY := $(shell hostinfo | awk '/^Primary memory available: [0-9.]+ gigabytes$$/ {print int($$4)}')
+COLIMA_CPUS := $(shell awk -v n='$(HOST_CPUS)' 'BEGIN {m = int(n / 2); print (m < 2 ? 2 : m)}')
+COLIMA_MEMORY := $(shell awk -v n='$(HOST_MEMORY)' 'BEGIN {m = int(n / 4); print (m < 2 ? 2 : m)}')
 
 # test collides with the test/ directory, so every target is declared here.
 .PHONY: help dump install cleanup-check colima-start upgrade test test-env \
@@ -19,8 +25,11 @@ install:  ## Install packages listed in the Brewfile
 cleanup-check:  ## Show packages not in Brewfile (dry run)
 	brew bundle cleanup --file=$(BREW_FILE)
 
-colima-start:  ## Start colima with restricted mounts
+colima-start:  ## Start colima with restricted mounts, sized to the machine
+	$(if $(HOST_CPUS),,$(error hostinfo has no processor count; set HOST_CPUS=<n>))
+	$(if $(HOST_MEMORY),,$(error hostinfo has no memory size; set HOST_MEMORY=<GiB>))
 	colima start --arch aarch64 --vm-type vz --vz-rosetta \
+	  --cpus $(COLIMA_CPUS) --memory $(COLIMA_MEMORY) \
 	  --mount $$HOME/projects:w
 
 upgrade:  ## Upgrade installed packages
