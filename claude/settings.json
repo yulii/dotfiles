@@ -99,7 +99,10 @@
       "Bash(git checkout --discard-changes*)",
       "Bash(git checkout * --discard-changes*)",
       "Bash(git push --force*)",
+      "Bash(git push * --force*)",
       "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git push * +*)",
       "Bash(git push -u*)",
       "Bash(git push * -u*)",
       "Bash(git push --set-upstream*)",
@@ -136,7 +139,7 @@
           {
             "type": "command",
             "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'reset([[:space:]]|$).*--hard' || m \"$g\"'switch(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
+            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'switch(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
             "timeout": 10
           },
           {

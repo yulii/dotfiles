@@ -55,9 +55,10 @@ pass	gh api --method GET search/code -F q=x
 pass	gh api 'repos/o/r/contents/a.go?ref=v1' --jq .content | base64 -d | grep -f p
 pass	gh pr view 1 -F x
 
-# Discarding uncommitted changes asks
-ask	git reset --hard
-ask	git reset --hard HEAD~1
+# Discarding uncommitted changes asks. git reset runs outside the sandbox and
+# is not allowed, so the permission prompt already asks for --hard
+pass	git reset --hard
+pass	git reset --hard HEAD~1
 pass	git reset HEAD~1
 ask	git switch -f main
 ask	git switch --discard-changes main
@@ -82,7 +83,6 @@ pass	git rm --cached -r dir
 pass	git rm a-file.md
 
 # Global options before the subcommand do not hide it
-ask	git -C sub reset --hard
 ask	git -C sub rm -f a.md
 ask	git --git-dir=.git --work-tree=. restore a.md
 ask	git --work-tree . clean -f
