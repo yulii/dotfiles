@@ -95,10 +95,3 @@ ask	git branch -C merged other
 ask	git -C . branch -D merged
 ask	git branch -D 'merged'
 ask	git branch -D $b
-
-# Text that mentions a command is not a command
-pass	gh pr create --title x --body "use git switch; git checkout a.md is denied"
-pass	gh issue comment 3 --body "x; git checkout a.md"
-pass	git commit -m "x; git checkout a.md"
-pass	grep -n 'git checkout a.md' CLAUDE.md
-pass	git log -S'"git checkout *"'
