@@ -16,6 +16,19 @@ deny	git push origin HEAD --set-upstream
 pass	git push origin HEAD
 pass	git push origin feature-update
 
+# A force push rewrites the remote. The push hooks fail open, and a sandboxed
+# push runs without a prompt, so these rules stay. The hook also catches
+# git push -qf and git -C sub push -f (hooks.tsv)
+deny	git push --force origin HEAD
+deny	git push -f origin HEAD
+deny	git push --force-with-lease origin HEAD
+deny	git push origin HEAD --force
+deny	git push origin HEAD -f
+deny	git push origin +main
+deny	git push origin +HEAD:main
+pass	git push origin feature-fix
+pass	git push origin HEAD --follow-tags
+
 # gh prints the keyring token. Plain text rules miss git credential fill,
 # security find-internet-password, and commands wrapped in a script
 deny	gh auth token
