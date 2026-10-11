@@ -1,0 +1,22 @@
+# expect<TAB>command
+# expect: allow or pass, by the Bash() rules in permissions.allow of the global settings.
+# Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
+# Claude Code checks deny, then ask, then allow, so a command in ask.tsv still asks.
+
+# Commands in sandbox.excludedCommands run outside the sandbox, so they need
+# an allow rule to go without a prompt. --hard, --merge, and --keep ask
+allow	git reset
+allow	git reset HEAD~1
+allow	git reset --soft main
+allow	git merge main --no-edit
+allow	git merge --abort
+allow	git branch -m old new
+pass	git rebase main
+pass	git stash push
+pass	git cherry-pick 62ca1ec
+pass	git remote add upstream https://github.com/o/r.git
+
+# echo prints the status of the command before it.
+# Not checked here whether Claude Code's matcher takes $? as plain text
+allow	echo "test=$?"
+allow	echo done

@@ -24,8 +24,8 @@ pass	gh issue list
 
 # Discarding uncommitted changes asks. git clean and git restore ask in every
 # form. Missed: git rm -rqf and a subcommand behind -C, --git-dir or
-# --work-tree. git reset runs outside the sandbox and is not allowed, so the
-# permission prompt already asks for --hard
+# --work-tree. git reset is allowed (allow.tsv), so --hard, --merge, and
+# --keep ask wherever they stand
 ask	git switch -f main
 ask	git switch main -f
 ask	git switch --force main
@@ -52,6 +52,16 @@ ask	git rm -qf a.md
 ask	git rm --force a.md
 ask	git rm -r -f dir
 ask	git rm -rf dir
+ask	git reset --hard
+ask	git reset --hard HEAD~1
+ask	git reset HEAD~1 --hard
+ask	git reset -q --hard main
+ask	git reset --merge
+ask	git reset --keep main
+pass	git reset
+pass	git reset HEAD~1
+pass	git reset --soft main
+pass	git reset --mixed HEAD~1
 pass	git rm a.md
 pass	git rm -q a.md
 pass	git rm --cached -r dir
