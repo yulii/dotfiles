@@ -58,6 +58,11 @@
       "Bash(git checkout -b *)",
       "Bash(git pull *)",
       "Bash(git branch -d *)",
+      "Bash(git branch -m *)",
+      "Bash(git reset)",
+      "Bash(git reset *)",
+      "Bash(git merge *)",
+      "Bash(echo *)",
       "Bash(gh pr create *)",
       "Bash(gh pr view *)",
       "Bash(gh pr list *)",
@@ -87,6 +92,9 @@
       "Bash(git switch * --discard-changes*)",
       "Bash(git clean*)",
       "Bash(git restore*)",
+      "Bash(git reset *--hard*)",
+      "Bash(git reset *--merge*)",
+      "Bash(git reset *--keep*)",
       "Bash(git rm -f*)",
       "Bash(git rm * -f*)",
       "Bash(git rm --force*)",
@@ -156,6 +164,11 @@
             "type": "command",
             "if": "Bash(git *)",
             "command": "~/.claude/hooks/guard-push.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/guard-excluded-chain.sh",
             "timeout": 10
           },
           {

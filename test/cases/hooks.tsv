@@ -72,7 +72,8 @@ pass	git branch --delete topic
 pass	git branch -d a b
 pass	git branch -d feature-fix
 pass	git branch --format=%(refname)
-pass	git branch -d topic && ls -f
+# Chained, git branch is denied for running in the sandbox; see the end
+deny	git branch -d topic && ls -f
 ask	git -C sub branch -D topic
 ask	git -c core.x=y branch -M old new
 pass	git -C sub branch -d topic
@@ -87,7 +88,7 @@ ask	git branch -D unmerged
 ask	git branch -D ghfail
 ask	git branch -D nosuch
 ask	git branch -D merged unmerged
-ask	git branch -D merged && ls
+deny	git branch -D merged && ls
 ask	git branch -D -f merged
 ask	git branch -f merged HEAD
 ask	git branch -M merged other
@@ -95,3 +96,28 @@ ask	git branch -C merged other
 ask	git -C . branch -D merged
 ask	git branch -D 'merged'
 ask	git branch -D $b
+
+# A command in sandbox.excludedCommands is denied when chained, since only a
+# lone command runs outside the sandbox. Quotes, heredoc bodies, and 2>&1 are
+# not read. Missed: sh -c, ( ), $( ), and git -C sub switch
+deny	git switch main && git pull origin main
+deny	git switch main && git pull origin main && git branch -D topic
+deny	git pull origin main; ls
+deny	make test; git reset
+deny	git branch -a | grep topic
+deny	git stash list|cat
+deny	git status\ngit switch main
+deny	for b in a b; do git branch -m $b x$b; done
+deny	git switch main 2>&1 | cat
+pass	git switch main
+pass	git pull origin main 2>&1
+pass	git reset --soft main
+pass	git merge main --no-edit 2>&1
+pass	git status && git log
+pass	git rev-parse --abbrev-ref HEAD && git status
+pass	git tag -a v1 -m "git switch main && git pull origin main"
+pass	git tag -a v1 -m 'run git stash; then git stash pop'
+pass	git tag -a v1 -F - <<'MSG'\nSubject\n\ngit switch main && git pull origin main\nMSG
+pass	gh pr create --title x --body "git pull origin main; git switch main"
+pass	ls && echo git switch main
+pass	grep 'a|git switch' f

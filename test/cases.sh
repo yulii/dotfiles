@@ -17,10 +17,10 @@ trap 'rm -rf "$work"' EXIT
 # Print "expect<TAB>input" lines without comments or blanks.
 cases() { grep -vE '^(#|$)' "$1"; }
 
-# Hook scripts are run through a scratch HOME that links them as init/links
-# does.
+# Hook scripts are run through a scratch HOME that links them and the global
+# settings as init/links does.
 mkdir -p "$work/home/.claude/hooks"
-grep -E '^claude/hooks/' init/links | while read -r src dst; do
+grep -E '^claude/(hooks/|settings\.json )' init/links | while read -r src dst; do
   ln -s "$root/$src" "$work/home/$dst"
 done
 
@@ -30,6 +30,7 @@ done
 # later have a merged pull request whose head is the first commit, and later
 # has moved on since.
 # The gh stub fails for ghfail and finds no pull request for other branches.
+# A \n in the command stands for a newline.
 hooks="$work/hooks"
 jq -r '.hooks.PreToolUse[] | select(.matcher == "Bash") | .hooks[].command' \
   claude/settings.json >"$hooks"
@@ -56,7 +57,7 @@ chmod +x "$work/gh"
 while IFS="$tab" read -r expect cmd; do
   got=pass
   while IFS= read -r h; do
-    d=$(jq -n --arg c "$cmd" '{tool_input: {command: $c}}' |
+    d=$(jq -n --arg c "$cmd" '{tool_input: {command: ($c | gsub("\\\\n"; "\n"))}}' |
       (cd "$topic" && HOME="$work/home" GUARD_BRANCH_GH="$work/gh" sh -c "$h") |
       jq -r '.hookSpecificOutput.permissionDecision // empty' 2>/dev/null || true)
     case "$d:$got" in
@@ -101,9 +102,9 @@ done <<EOF
 $(cases test/cases/permission-log.tsv)
 EOF
 
-# Deny and ask: match each command against the Bash() rules of
-# permissions.deny or permissions.ask as shell globs.
-for kind in deny ask; do
+# Deny, ask, and allow: match each command against the Bash() rules of
+# permissions.deny, permissions.ask, or permissions.allow as shell globs.
+for kind in deny ask allow; do
   rules="$work/$kind"
   jq -r --arg k "$kind" '.permissions[$k][]? | select(startswith("Bash(")) | .[5:-1]' \
     claude/settings.json >"$rules"
