@@ -43,6 +43,12 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:code.claude.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:github.blog)",
+      "WebFetch(domain:pkg.go.dev)",
+      "WebFetch(domain:www.rfc-editor.org)",
       "Read(//private/tmp/claude-*/**)",
       "Read(//tmp/claude-*/**)",
       "Edit(//private/tmp/claude-*/**)",
@@ -54,6 +60,11 @@
       "Bash(gh pr view *)",
       "Bash(gh pr list *)",
       "Bash(gh pr diff *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh repo view *)",
+      "Bash(gh release view *)",
+      "Bash(gh release list *)",
       "Bash(make *)"
     ],
     "ask": [

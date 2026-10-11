@@ -85,7 +85,6 @@ Targets define what may run without confirmation.
 - After merging a PR, always do these without asking
   - Switch to the default branch and pull it
   - Delete the merged local branches with `git branch -d`
-- Do not open GitHub URLs with WebFetch
 
 # Rule Precedence
 
