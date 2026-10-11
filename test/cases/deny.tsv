@@ -26,19 +26,29 @@ deny	gh auth status --hostname github.com -t
 pass	gh auth status
 pass	gh auth status --hostname github.com
 
-# git checkout <file> drops uncommitted changes without asking. Claude Code
-# also matches each subcommand, so git status && git checkout a.md is denied
-# there; this glob check cannot show it. git -C sub checkout is not denied
+# git checkout drops uncommitted changes without asking in the forms below.
+# Claude Code also matches each subcommand, so git status && git checkout . is
+# denied there; this glob check cannot show it. git -C sub checkout is not denied
 deny	git checkout
-deny	git checkout a.md
 deny	git checkout -- a.md
 deny	git checkout .
 deny	git checkout main -- a.md
-deny	git checkout main
 deny	git checkout -f main
+deny	git checkout main -f
+deny	git checkout --force main
+deny	git checkout main --force
 deny	git checkout --discard-changes main
-deny	git checkout -b topic2
-deny	git checkout 62ca1ec
-deny	git checkout main && ls ..
+deny	git checkout main --discard-changes
+deny	git checkout -f -b topic2 main
+deny	git checkout -b topic2 main -f
+# git checkout -b is allowed. With a path it fails and keeps the changes
+pass	git checkout -b topic2
+pass	git checkout -b topic2 main
+pass	git checkout -b feature-fix
+# A glob cannot tell a path from a branch; these fall to the permission prompt
+pass	git checkout a.md
+pass	git checkout main
+pass	git checkout 62ca1ec
+pass	git checkout main && ls ..
 pass	git switch main
 pass	gh pr checkout 12

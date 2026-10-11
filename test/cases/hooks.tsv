@@ -138,8 +138,7 @@ pass	git rm a.md; rm -f x
 pass	git rm a.md | grep -f p
 pass	git restore --staged a.md && git status
 
-# git checkout is denied by permissions.deny (test/cases/deny.tsv), not by a
-# hook. git switch moves between branches, and git restore --staged unstages.
+# git checkout is judged by permissions (test/cases/deny.tsv), not by a hook. git switch moves between branches, and git restore --staged unstages.
 pass	git switch main
 pass	git switch --detach 62ca1ec
 pass	gh pr checkout 12
