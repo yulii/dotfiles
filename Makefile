@@ -13,26 +13,28 @@ COLIMA_MEMORY := $(shell awk -v n='$(HOST_MEMORY)' 'BEGIN {m = int(n / 4); print
 .PHONY: help dump install cleanup-check colima-start upgrade test test-env \
   list-brew-uses setup
 
+# [manual] marks a target to run in a terminal: it writes outside the Bash
+# sandbox, so it fails when Claude Code runs it.
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 dump:  ## Export installed packages list
 	brew bundle dump --file=$(BREW_FILE) --force
 
-install:  ## Install packages listed in the Brewfile
+install:  ## [manual] Install packages listed in the Brewfile
 	brew bundle --file=$(BREW_FILE)
 
 cleanup-check:  ## Show packages not in Brewfile (dry run)
 	brew bundle cleanup --file=$(BREW_FILE)
 
-colima-start:  ## Start colima with restricted mounts, sized to the machine
+colima-start:  ## [manual] Start colima with restricted mounts, sized to the machine
 	$(if $(HOST_CPUS),,$(error hostinfo has no processor count; set HOST_CPUS=<n>))
 	$(if $(HOST_MEMORY),,$(error hostinfo has no memory size; set HOST_MEMORY=<GiB>))
 	colima start --arch aarch64 --vm-type vz --vz-rosetta \
 	  --cpus $(COLIMA_CPUS) --memory $(COLIMA_MEMORY) \
 	  --mount $$HOME/projects:w
 
-upgrade:  ## Upgrade installed packages
+upgrade:  ## [manual] Upgrade installed packages
 	brew upgrade
 
 test:  ## Check the repository
@@ -44,5 +46,5 @@ test-env:  ## Check that this machine matches the repository
 list-brew-uses:  ## List all installed formulae along with the number of formulae being used.
 	brew list | xargs -P$(MAX_PROCS) -I{} sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 
-setup:  ## Run initial setup only once!
+setup:  ## [manual] Run initial setup only once!
 	./configure.sh
