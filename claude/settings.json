@@ -78,7 +78,23 @@
       "Bash(gh issue create*)",
       "Bash(gh issue edit*)",
       "Bash(gh issue comment*)",
-      "Bash(gh issue close*)"
+      "Bash(gh issue close*)",
+      "Bash(git switch -f*)",
+      "Bash(git switch * -f*)",
+      "Bash(git switch --force*)",
+      "Bash(git switch * --force*)",
+      "Bash(git switch --discard-changes*)",
+      "Bash(git switch * --discard-changes*)",
+      "Bash(git clean*)",
+      "Bash(git restore*)",
+      "Bash(git rm -f*)",
+      "Bash(git rm * -f*)",
+      "Bash(git rm --force*)",
+      "Bash(git rm * --force*)",
+      "Bash(git rm -rf*)",
+      "Bash(git rm * -rf*)",
+      "Bash(git rm -qf*)",
+      "Bash(git rm * -qf*)"
     ],
     "deny": [
       "Read(~/.ssh/**)",
@@ -128,12 +144,6 @@
             "type": "command",
             "if": "Bash(git *)",
             "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。回避せずに止まり、git secrets --scan --cached の結果をユーザーに報告する。.gitallowed は自分で編集しない。\"}}'; exit 0",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "if": "Bash(git *)",
-            "command": "g='git([[:space:]]+(-[Cc]|--(git-dir|work-tree|namespace|config-env))[[:space:]]+[^[:space:]]+|[[:space:]]+-[^[:space:]]+)*[[:space:]]+'; c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do m() { printf '%s' \" $l\" | grep -Eq -e \"$1\"; }; { m \"$g\"'switch(.*[[:space:]])?(-f|--force|--discard-changes)([[:space:]]|$)' || m \"$g\"'clean(.*[[:space:]])?(--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' || { m \"$g\"'restore([[:space:]]|$)' && { ! m '[[:space:]](--staged|-[a-zA-Z]*S[a-zA-Z]*)([[:space:]]|$)' || m '[[:space:]](--worktree|-[a-zA-Z]*W[a-zA-Z]*)([[:space:]]|$)'; }; } || m \"$g\"'rm([[:space:]].*)?[[:space:]](--force|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)'; } && { echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"未コミットの変更を捨てる操作。\"}}'; break; }; done; exit 0",
             "timeout": 10
           },
           {

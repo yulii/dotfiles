@@ -21,3 +21,39 @@ pass	gh pr list --state merged
 pass	gh pr checks 12
 pass	gh issue view 3
 pass	gh issue list
+
+# Discarding uncommitted changes asks. git clean and git restore ask in every
+# form. Missed: git rm -rqf and a subcommand behind -C, --git-dir or
+# --work-tree. git reset runs outside the sandbox and is not allowed, so the
+# permission prompt already asks for --hard
+ask	git switch -f main
+ask	git switch main -f
+ask	git switch --force main
+ask	git switch main --force
+ask	git switch --discard-changes main
+ask	git switch main --discard-changes
+pass	git switch main
+pass	git switch -c topic
+pass	git switch -c feature-fix
+pass	git switch --detach 62ca1ec
+ask	git clean -f
+ask	git clean -fd
+ask	git clean -xdf
+ask	git clean --force
+ask	git clean -n
+ask	git restore a.md
+ask	git restore --source=HEAD~1 a.md
+ask	git restore --staged --worktree a.md
+ask	git restore -SW a.md
+ask	git restore --staged a.md
+ask	git rm -f a.md
+ask	git rm a.md -f
+ask	git rm -qf a.md
+ask	git rm --force a.md
+ask	git rm -r -f dir
+ask	git rm -rf dir
+pass	git rm a.md
+pass	git rm -q a.md
+pass	git rm --cached -r dir
+pass	git rm a-file.md
+pass	git rm -r a-file.md
