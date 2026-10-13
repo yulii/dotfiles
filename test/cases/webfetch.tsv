@@ -18,3 +18,9 @@ keep	WebFetch(domain:github.*)
 keep	WebFetch(domain:*.uploads.github.com)
 keep	WebFetch
 keep	Bash(curl *)
+
+# gh run view --log downloads the run logs from the Actions results host
+cut	WebFetch(domain:results-receiver.actions.githubusercontent.com)
+
+# Blob storage stays outside: anyone can own an account there and receive data
+keep	WebFetch(domain:productionresultssa0.blob.core.windows.net)
