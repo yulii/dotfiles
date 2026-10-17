@@ -1,46 +1,4 @@
 {
-  "autoMemoryEnabled": false,
-  "agentPushNotifEnabled": true,
-  "language": "japanese",
-  "sandbox": {
-    "enabled": true,
-    "failIfUnavailable": true,
-    "allowUnsandboxedCommands": false,
-    "enableWeakerNetworkIsolation": true,
-    "excludedCommands": [
-      "git pull *",
-      "git merge *",
-      "git switch *",
-      "git checkout -b *",
-      "git rebase *",
-      "git stash *",
-      "git cherry-pick *",
-      "git reset *",
-      "git branch *",
-      "git remote *",
-      "gh pr checkout *",
-      "gh repo sync *",
-      "gh repo set-default *"
-    ],
-    "filesystem": {
-      "denyRead": [
-        "~/.ssh",
-        "~/.aws",
-        "~/.gnupg",
-        "~/.netrc",
-        "~/.docker/config.json"
-      ]
-    },
-    "network": {
-      "allowedDomains": [
-        "github.com",
-        "api.github.com",
-        "objects.githubusercontent.com",
-        "uploads.github.com",
-        "results-receiver.actions.githubusercontent.com"
-      ]
-    }
-  },
   "permissions": {
     "allow": [
       "WebSearch",
@@ -74,36 +32,6 @@
       "Bash(gh release view *)",
       "Bash(gh release list *)",
       "Bash(make *)"
-    ],
-    "ask": [
-      "Bash(gh pr merge*)",
-      "Bash(gh pr comment*)",
-      "Bash(gh pr review*)",
-      "Bash(gh pr edit*)",
-      "Bash(gh pr close*)",
-      "Bash(gh issue create*)",
-      "Bash(gh issue edit*)",
-      "Bash(gh issue comment*)",
-      "Bash(gh issue close*)",
-      "Bash(git switch -f*)",
-      "Bash(git switch * -f*)",
-      "Bash(git switch --force*)",
-      "Bash(git switch * --force*)",
-      "Bash(git switch --discard-changes*)",
-      "Bash(git switch * --discard-changes*)",
-      "Bash(git clean*)",
-      "Bash(git restore*)",
-      "Bash(git reset *--hard*)",
-      "Bash(git reset *--merge*)",
-      "Bash(git reset *--keep*)",
-      "Bash(git rm -f*)",
-      "Bash(git rm * -f*)",
-      "Bash(git rm --force*)",
-      "Bash(git rm * --force*)",
-      "Bash(git rm -rf*)",
-      "Bash(git rm * -rf*)",
-      "Bash(git rm -qf*)",
-      "Bash(git rm * -qf*)"
     ],
     "deny": [
       "Read(~/.ssh/**)",
@@ -142,6 +70,36 @@
       "Bash(docker -H*)",
       "Bash(docker --host*)",
       "Bash(docker context use *)"
+    ],
+    "ask": [
+      "Bash(gh pr merge*)",
+      "Bash(gh pr comment*)",
+      "Bash(gh pr review*)",
+      "Bash(gh pr edit*)",
+      "Bash(gh pr close*)",
+      "Bash(gh issue create*)",
+      "Bash(gh issue edit*)",
+      "Bash(gh issue comment*)",
+      "Bash(gh issue close*)",
+      "Bash(git switch -f*)",
+      "Bash(git switch * -f*)",
+      "Bash(git switch --force*)",
+      "Bash(git switch * --force*)",
+      "Bash(git switch --discard-changes*)",
+      "Bash(git switch * --discard-changes*)",
+      "Bash(git clean*)",
+      "Bash(git restore*)",
+      "Bash(git reset *--hard*)",
+      "Bash(git reset *--merge*)",
+      "Bash(git reset *--keep*)",
+      "Bash(git rm -f*)",
+      "Bash(git rm * -f*)",
+      "Bash(git rm --force*)",
+      "Bash(git rm * --force*)",
+      "Bash(git rm -rf*)",
+      "Bash(git rm * -rf*)",
+      "Bash(git rm -qf*)",
+      "Bash(git rm * -qf*)"
     ]
   },
   "hooks": {
@@ -151,20 +109,20 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git *)",
             "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s' \"$c\" | grep -Eq 'git[[:space:]]+commit' || exit 0; command -v git-secrets >/dev/null 2>&1 || exit 0; git rev-parse --git-dir >/dev/null 2>&1 || exit 0; git secrets --scan --cached >/dev/null 2>&1 && exit 0; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"staged の内容が git-secrets のパターンに一致した。回避せずに止まり、git secrets --scan --cached の結果をユーザーに報告する。.gitallowed は自分で編集しない。\"}}'; exit 0",
+            "if": "Bash(git *)",
             "timeout": 10
           },
           {
             "type": "command",
-            "if": "Bash(git *)",
             "command": "~/.claude/hooks/guard-branch-delete.sh",
+            "if": "Bash(git *)",
             "timeout": 30
           },
           {
             "type": "command",
-            "if": "Bash(git *)",
             "command": "~/.claude/hooks/guard-push.sh",
+            "if": "Bash(git *)",
             "timeout": 10
           },
           {
@@ -174,8 +132,8 @@
           },
           {
             "type": "command",
-            "if": "Bash(gh *)",
             "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do l=\" $l\"; printf '%s' \"$l\" | grep -Eq '[[:space:]]gh[[:space:]]+api([[:space:]]|$)' || continue; m=$(printf '%s' \"$l\" | grep -Eo '[[:space:]](-X|--method)(=|[[:space:]]*)[A-Za-z]+' | sed -nE '$s/.*(-X|--method)(=|[[:space:]]*)//p' | tr '[:lower:]' '[:upper:]'); if [ -n \"$m\" ]; then [ \"$m\" = GET ] && continue; else printf '%s' \"$l\" | grep -Eq '[[:space:]](-[fF]|--field|--raw-field|--input)' || continue; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"GitHub に書き込む gh api。-X GET 以外のメソッドか、-X GET なしの -f・-F・--input は POST になる。\"}}'; break; done; exit 0",
+            "if": "Bash(gh *)",
             "timeout": 10
           }
         ]
@@ -192,5 +150,48 @@
         ]
       }
     ]
-  }
+  },
+  "language": "japanese",
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "objects.githubusercontent.com",
+        "uploads.github.com",
+        "results-receiver.actions.githubusercontent.com"
+      ]
+    },
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.docker/config.json"
+      ]
+    },
+    "enableWeakerNetworkIsolation": true,
+    "excludedCommands": [
+      "git pull *",
+      "git merge *",
+      "git switch *",
+      "git checkout -b *",
+      "git rebase *",
+      "git stash *",
+      "git cherry-pick *",
+      "git reset *",
+      "git branch *",
+      "git remote *",
+      "gh pr checkout *",
+      "gh repo sync *",
+      "gh repo set-default *"
+    ]
+  },
+  "autoMemoryEnabled": false,
+  "agentPushNotifEnabled": true,
+  "theme": "dark"
 }
