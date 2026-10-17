@@ -1,7 +1,9 @@
 # expect<TAB>command
 # expect: ask or pass, by the Bash() rules in permissions.ask of the global settings.
 # Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
-# git push and gh api are judged by hooks; see hooks.tsv.
+# git push is judged by hooks; see hooks.tsv. gh api is judged by both the
+# rules here and a hook, since the docs do not say whether a hook's ask wins
+# over an allow rule.
 
 # Writing to a pull request or an issue asks
 ask	gh pr merge 12 --squash
@@ -21,6 +23,26 @@ pass	gh pr list --state merged
 pass	gh pr checks 12
 pass	gh issue view 3
 pass	gh issue list
+
+# gh api asks in the forms that can write, with the hook (hooks.tsv). The
+# rules ask broadly, so a search with -X GET and fields, and a graphql
+# query, also ask. Plain reads are allowed (allow.tsv)
+ask	gh api repos/o/r/issues -f title=x
+ask	gh api repos/o/r/issues -F title=x
+ask	gh api repos/o/r/issues --field title=x
+ask	gh api repos/o/r/issues --raw-field title=x
+ask	gh api repos/o/r/issues --input body.json
+ask	gh api -X POST repos/o/r/issues
+ask	gh api -XPOST repos/o/r/issues
+ask	gh api --method DELETE repos/o/r/git/refs/heads/x
+ask	gh api --method=patch repos/o/r
+ask	gh api graphql -f query='mutation { x }'
+ask	gh api -X PUT repos/o/r/pulls/1/merge
+ask	gh api -X GET search/code -f q=x
+ask	gh api --method GET search/code -F q=x
+ask	gh api graphql -f query='query { viewer { login } }'
+pass	gh api repos/o/r
+pass	gh api repos/o/r/pulls --jq '.[].number'
 
 # Discarding uncommitted changes asks. git clean and git restore ask in every
 # form. Missed: git rm -rqf and a subcommand behind -C, --git-dir or

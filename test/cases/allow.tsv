@@ -16,6 +16,11 @@ pass	git stash push
 pass	git cherry-pick 62ca1ec
 pass	git remote add upstream https://github.com/o/r.git
 
+# gh api reads without a prompt. The forms that can write ask (ask.tsv)
+allow	gh api repos/o/r
+allow	gh api 'repos/o/r/contents/a.go?ref=v1' --jq .content
+allow	gh api repos/o/r/commits/abc/check-runs
+
 # echo prints the status of the command before it.
 # Not checked here whether Claude Code's matcher takes $? as plain text
 allow	echo "test=$?"
