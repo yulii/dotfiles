@@ -1,6 +1,7 @@
 # expect<TAB>command
 # expect: allow or pass, by the Bash() rules in permissions.allow of the global settings.
-# Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
+# Rules are matched as shell globs, and a trailing " *" also matches the bare
+# command, as the docs say. This checks the rule text, not Claude Code's matcher.
 # Claude Code checks deny, then ask, then allow, so a command in ask.tsv still asks.
 
 # Commands in sandbox.excludedCommands run outside the sandbox, so they need
@@ -12,7 +13,7 @@ allow	git merge main --no-edit
 allow	git merge --abort
 allow	git branch -m old new
 pass	git rebase main
-pass	git stash push
+allow	git stash push
 pass	git cherry-pick 62ca1ec
 pass	git remote add upstream https://github.com/o/r.git
 
@@ -20,6 +21,30 @@ pass	git remote add upstream https://github.com/o/r.git
 allow	gh api repos/o/r
 allow	gh api 'repos/o/r/contents/a.go?ref=v1' --jq .content
 allow	gh api repos/o/r/commits/abc/check-runs
+
+# git stash runs outside the sandbox. push and pop keep the changes; drop and
+# clear ask (ask.tsv)
+allow	git stash
+allow	git stash push -m x -- a.md
+allow	git stash pop
+
+# gh reads of runs and checks
+allow	gh run view 1 --log-failed
+allow	gh pr checks 12
+
+# Text tools that read stdin and print, so a pipe of them goes without a
+# prompt. sort -o and base64 -o write a file and ask (ask.tsv)
+allow	jq -r .name
+allow	sort -u
+allow	uniq -c
+allow	cut -f1
+allow	base64 -d
+# awk and sed can write files or run commands, xargs runs any command, and
+# uniq with operands writes the second one
+pass	awk '{print}'
+pass	sed -n 1p a.md
+pass	uniq a b
+pass	xargs rm
 
 # echo prints the status of the command before it.
 # Not checked here whether Claude Code's matcher takes $? as plain text

@@ -104,6 +104,9 @@ EOF
 
 # Deny, ask, and allow: match each command against the Bash() rules of
 # permissions.deny, permissions.ask, or permissions.allow as shell globs.
+# As in the docs, a trailing " *" that is the rule's only wildcard also
+# matches the bare command: Bash(ls *) matches ls.
+# https://code.claude.com/docs/en/permissions
 for kind in deny ask allow; do
   rules="$work/$kind"
   jq -r --arg k "$kind" '.permissions[$k][]? | select(startswith("Bash(")) | .[5:-1]' \
@@ -113,6 +116,10 @@ for kind in deny ask allow; do
     while IFS= read -r r; do
       # shellcheck disable=SC2254 # the rule is the glob
       case "$cmd" in $r) got=$kind ;; esac
+      case "$r" in
+        *'*'*' *') ;;
+        *' *') if [ "$cmd" = "${r% \*}" ]; then got=$kind; fi ;;
+      esac
     done <"$rules"
     if [ "$got" = "$expect" ]; then ok "$kind $expect: $cmd"; else ng "$kind $expect, got $got: $cmd"; fi
   done <<EOF

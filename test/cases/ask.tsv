@@ -1,6 +1,7 @@
 # expect<TAB>command
 # expect: ask or pass, by the Bash() rules in permissions.ask of the global settings.
-# Rules are matched as shell globs. This checks the rule text, not Claude Code's matcher.
+# Rules are matched as shell globs, and a trailing " *" also matches the bare
+# command, as the docs say. This checks the rule text, not Claude Code's matcher.
 # git push is judged by hooks; see hooks.tsv. gh api is judged by both the
 # rules here and a hook, since the docs do not say whether a hook's ask wins
 # over an allow rule.
@@ -23,6 +24,24 @@ pass	gh pr list --state merged
 pass	gh pr checks 12
 pass	gh issue view 3
 pass	gh issue list
+
+# Running, rerunning, or removing an Actions run asks
+ask	gh workflow run x.yml
+ask	gh run rerun 1
+
+# Text tools that write a file with -o ask. The other forms are allowed
+# (allow.tsv)
+ask	sort -o a.txt b.txt
+ask	sort --output=a b
+ask	base64 -o out in
+pass	sort -u
+pass	base64 -d
+
+# git stash drop and clear lose the changes and ask. push and pop keep them
+ask	git stash drop
+ask	git stash drop stash@{0}
+ask	git stash clear
+pass	git stash pop
 
 # gh api asks in the forms that can write, with the hook (hooks.tsv). The
 # rules ask broadly, so a search with -X GET and fields, and a graphql

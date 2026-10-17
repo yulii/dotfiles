@@ -22,5 +22,20 @@ keep	Bash(curl *)
 # gh run view --log downloads the run logs from the Actions results host
 cut	WebFetch(domain:results-receiver.actions.githubusercontent.com)
 
+# Tool docs allowed to WebFetch are not sandbox domains, so a deny of them
+# would leave the sandbox as is
+keep	WebFetch(domain:opentofu.org)
+keep	WebFetch(domain:developer.hashicorp.com)
+keep	WebFetch(domain:registry.terraform.io)
+keep	WebFetch(domain:golangci-lint.run)
+keep	WebFetch(domain:staticcheck.dev)
+keep	WebFetch(domain:staticcheck.io)
+keep	WebFetch(domain:go.dev)
+keep	WebFetch(domain:docs.sqlc.dev)
+keep	WebFetch(domain:docs.docker.com)
+keep	WebFetch(domain:hub.docker.com)
+keep	WebFetch(domain:biomejs.dev)
+keep	WebFetch(domain:cli.github.com)
+
 # Blob storage stays outside: anyone can own an account there and receive data
 keep	WebFetch(domain:productionresultssa0.blob.core.windows.net)
