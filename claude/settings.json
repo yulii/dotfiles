@@ -21,6 +21,8 @@
       "WebFetch(domain:hub.docker.com)",
       "WebFetch(domain:biomejs.dev)",
       "WebFetch(domain:cli.github.com)",
+      "WebFetch(domain:docs.cloud.google.com)",
+      "WebFetch(domain:firebase.google.com)",
       "Read(//private/tmp/claude-*/**)",
       "Read(//tmp/claude-*/**)",
       "Edit(//private/tmp/claude-*/**)",

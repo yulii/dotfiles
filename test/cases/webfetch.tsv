@@ -36,6 +36,8 @@ keep	WebFetch(domain:docs.docker.com)
 keep	WebFetch(domain:hub.docker.com)
 keep	WebFetch(domain:biomejs.dev)
 keep	WebFetch(domain:cli.github.com)
+keep	WebFetch(domain:docs.cloud.google.com)
+keep	WebFetch(domain:firebase.google.com)
 
 # Blob storage stays outside: anyone can own an account there and receive data
 keep	WebFetch(domain:productionresultssa0.blob.core.windows.net)
