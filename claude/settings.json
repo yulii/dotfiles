@@ -263,6 +263,7 @@
     ]
   },
   "autoMemoryEnabled": false,
+  "theme": "dark",
   "agentPushNotifEnabled": true,
-  "theme": "dark"
+  "tui": "fullscreen"
 }
