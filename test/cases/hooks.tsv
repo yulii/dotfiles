@@ -121,3 +121,32 @@ pass	git tag -a v1 -F - <<'MSG'\nSubject\n\ngit switch main && git pull origin m
 pass	gh pr create --title x --body "git pull origin main; git switch main"
 pass	ls && echo git switch main
 pass	grep 'a|git switch' f
+
+# Loops, NAME=$(...), and awk are denied: Claude Code cannot check them before
+# they run and asks for nearly every one, even in the sandbox. A script file
+# run with sh is not asked. Single quotes and heredoc bodies are not read.
+# Missed: sh -c '...', and a loop or awk inside single quotes
+deny	for f in a b; do cat $f; done
+deny	ls; for f in *.md; do wc -l $f; done
+deny	while read l; do echo $l; done < f
+deny	until test -f x; do sleep 1; done
+deny	if true; then for f in a; do :; done; fi
+deny	x=$(date); echo $x
+deny	x=`date`; echo $x
+deny	echo $(for f in a; do echo $f; done)
+deny	awk 'NR<=3' f
+deny	grep a f | awk '{print $1}'
+deny	ls && awk 1 f
+deny	cat > x.sh <<'EOF'\necho\nEOF\nawk 1 f
+pass	grep -n 'for f in' f
+pass	echo for while until awk
+pass	grep -n awk f
+pass	make test-awk
+pass	J=x.jsonl; jq . $J
+pass	cat "$TMPDIR/x"
+pass	echo "x=$(date)"
+pass	git log --format=$(echo %h)
+pass	echo $(date)
+pass	sh /tmp/x.sh
+pass	git commit -F - <<'EOF'\nfor x in y; do awk 1 f; done\nx=$(date)\nEOF
+pass	sh -c 'for f in a; do echo $f; done'
