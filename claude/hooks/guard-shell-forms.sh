@@ -4,6 +4,9 @@
 #   - for, while, and until loops (92-99% asked)
 #   - NAME=$(...) and NAME=`...` (93% asked)
 #   - awk, which the sandbox never auto-allows (13 of 14 alone were asked)
+#   - a heredoc written to a file (94% asked into a $VAR path, 28% into a
+#     plain path); the Write tool writes files. A heredoc on stdin passes
+#   - git -c, whose config values such as core.pager run commands
 # Rates are from the permission log and transcripts, 2026-10-18 to 10-26.
 # A script file run with sh is not asked, loops and all, so the reason says to
 # write one. Plain variables such as $TMPDIR or X=literal are mostly not asked
@@ -49,6 +52,16 @@ if printf '%s\n' "$bare" | grep -Eq "$head(for|while|until)([[:space:]]|\$)" ||
 fi
 if printf '%s\n' "$bare" | grep -Eq "${head}awk([[:space:]]|\$)"; then
   reason="${reason}awk は sandbox の自動許可から外れ、承認要求になる。行の範囲は Read の offset と limit か sed -n 'a,bp'、抽出は grep を使う。集計はスクラッチパッドのスクリプトに書き、sh で実行する。"
+fi
+# A heredoc line that also redirects to a file or runs tee. N>&M, >&N, and
+# /dev/null are not files
+if printf '%s\n' "$bare" | grep -E '<<' | grep -vE '<<<' |
+  sed -E 's/[0-9]*>&[0-9-]+//g; s/[0-9]*>>?[[:space:]]*\/dev\/null//g' |
+  grep -Eq "(>|${head}tee([[:space:]]|\$))"; then
+  reason="${reason}ヒアドキュメントでファイルを書き出すと承認要求になる。ファイルは Write ツールで書く（スクラッチパッドのパスかプロジェクトの中。.claude/ の下は確認が出る）。"
+fi
+if printf '%s\n' "$bare" | grep -Eq "${head}git[[:space:]]+(-C[[:space:]]+[^[:space:]]+[[:space:]]+)?-c[[:space:]]"; then
+  reason="${reason}git -c は設定の値でコマンドを動かせるため承認要求になる。core.pager=cat は git --no-pager にし、他の設定は付けずに済む形を選ぶ。"
 fi
 [ -n "$reason" ] || exit 0
 

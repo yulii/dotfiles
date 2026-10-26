@@ -17,7 +17,8 @@ ask	git push -qf origin HEAD
 ask	git push origin +main
 ask	git push origin +HEAD:main
 ask	git -C sub push -f origin HEAD
-ask	git -c core.x=y push --force origin HEAD
+# git -c is denied by guard-shell-forms; see the loops section
+deny	git -c core.x=y push --force origin HEAD
 ask	git --git-dir=.git push -f origin HEAD
 ask	git --work-tree . push origin +main
 # The hooks do not parse quotes, so a push in a message also asks
@@ -75,7 +76,7 @@ pass	git branch --format=%(refname)
 # Chained, git branch is denied for running in the sandbox; see the end
 deny	git branch -d topic && ls -f
 ask	git -C sub branch -D topic
-ask	git -c core.x=y branch -M old new
+deny	git -c core.x=y branch -M old new
 pass	git -C sub branch -d topic
 
 # git branch -D alone is allowed when every branch is the head of a merged
@@ -150,6 +151,32 @@ pass	echo $(date)
 pass	sh /tmp/x.sh
 pass	git commit -F - <<'EOF'\nfor x in y; do awk 1 f; done\nx=$(date)\nEOF
 pass	sh -c 'for f in a; do echo $f; done'
+
+# A heredoc written to a file is denied: Claude Code asked for 94% of them
+# into a $VAR path and 28% into a plain path. The Write tool writes files.
+# A heredoc on stdin, such as git commit -F -, passes
+deny	cat > x.md <<'EOF'\nbody\nEOF
+deny	cat <<'EOF' > x.md\nbody\nEOF
+deny	cat >> "$TMPDIR/x.md" <<EOF\nbody\nEOF
+deny	tee x.md <<'EOF'\nbody\nEOF
+deny	mkdir -p d && cat > d/x.md <<'EOF'\nbody\nEOF
+pass	git commit -F - <<'EOF'\nmsg\nEOF
+pass	git commit -q -F - <<'EOF' 2>&1\nmsg\nEOF
+pass	git commit -m "$(cat <<'EOF'\nmsg\nEOF\n)"
+pass	cat <<'EOF'\nhi\nEOF
+pass	cat <<'EOF' >/dev/null\nhi\nEOF
+pass	jq . <<< '{}' > out.json
+pass	git commit -F - <<'EOF'\nrun cat > x <<EOF and git -c x\nEOF
+
+# git -c is denied: a config value such as core.pager or core.sshCommand
+# runs a command, so Claude Code asks for every one
+deny	git -c core.pager=cat log
+deny	git status && git -c core.quotepath=false diff
+deny	git -C sub -c core.x=y status
+pass	git --no-pager log
+pass	git log -c
+pass	git -C sub status
+pass	echo "git -c x"
 
 # A script file run by a shell or python asks when it pushes or writes to
 # GitHub, since the hooks above see only the command line. The scripts are
