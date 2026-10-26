@@ -13,3 +13,4 @@ claude/hooks/guard-branch-delete.sh .claude/hooks/guard-branch-delete.sh
 claude/hooks/guard-push.sh .claude/hooks/guard-push.sh
 claude/hooks/guard-excluded-chain.sh .claude/hooks/guard-excluded-chain.sh
 claude/hooks/guard-shell-forms.sh .claude/hooks/guard-shell-forms.sh
+claude/hooks/guard-script-github.sh .claude/hooks/guard-script-github.sh

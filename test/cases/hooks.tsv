@@ -150,3 +150,27 @@ pass	echo $(date)
 pass	sh /tmp/x.sh
 pass	git commit -F - <<'EOF'\nfor x in y; do awk 1 f; done\nx=$(date)\nEOF
 pass	sh -c 'for f in a; do echo $f; done'
+
+# A script file run by a shell or python asks when it pushes or writes to
+# GitHub, since the hooks above see only the command line. The scripts are
+# in test/fixtures/scripts. Missed: a script another script or make runs,
+# commands built from variables, and sh < file
+ask	sh push.sh
+ask	bash ./push.sh
+ask	zsh push.sh arg
+ask	sh -e push.sh
+ask	. ./push.sh
+ask	source push.sh
+ask	ls && sh push.sh
+ask	python3 -I push.py
+ask	python3 push.py
+ask	sh gh-write.sh
+ask	sh gh-api-write.sh
+ask	sh gh-api-field.sh
+ask	sh gh-auth.sh
+pass	sh gh-read.sh
+pass	sh words.sh
+pass	sh missing.sh
+pass	cat push.sh
+pass	grep -n push push.sh
+pass	sh -c 'echo hi'
