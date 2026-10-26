@@ -30,12 +30,15 @@ done
 # later have a merged pull request whose head is the first commit, and later
 # has moved on since.
 # The gh stub fails for ghfail and finds no pull request for other branches.
+# The scripts under test/fixtures/scripts sit at the top of the repository,
+# untracked, for the commands that run a script file.
 # A \n in the command stands for a newline.
 hooks="$work/hooks"
 jq -r '.hooks.PreToolUse[] | select(.matcher == "Bash") | .hooks[].command' \
   claude/settings.json >"$hooks"
 topic="$work/topic"
 git init -q -b topic "$topic"
+cp test/fixtures/scripts/* "$topic"
 commit() { git -C "$topic" -c user.name=t -c user.email=t@example.com commit -q --allow-empty --no-verify -m "$1"; }
 commit first
 first=$(git -C "$topic" rev-parse HEAD)

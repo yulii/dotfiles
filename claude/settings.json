@@ -21,6 +21,8 @@
       "WebFetch(domain:hub.docker.com)",
       "WebFetch(domain:biomejs.dev)",
       "WebFetch(domain:cli.github.com)",
+      "WebFetch(domain:docs.cloud.google.com)",
+      "WebFetch(domain:firebase.google.com)",
       "Read(//private/tmp/claude-*/**)",
       "Read(//tmp/claude-*/**)",
       "Edit(//private/tmp/claude-*/**)",
@@ -191,6 +193,16 @@
           },
           {
             "type": "command",
+            "command": "~/.claude/hooks/guard-shell-forms.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/guard-script-github.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
             "command": "c=$(jq -r '.tool_input.command // \"\"'); printf '%s\\n' \"$c\" | tr ';|&' '\\n' | while IFS= read -r l; do l=\" $l\"; printf '%s' \"$l\" | grep -Eq '[[:space:]]gh[[:space:]]+api([[:space:]]|$)' || continue; m=$(printf '%s' \"$l\" | grep -Eo '[[:space:]](-X|--method)(=|[[:space:]]*)[A-Za-z]+' | sed -nE '$s/.*(-X|--method)(=|[[:space:]]*)//p' | tr '[:lower:]' '[:upper:]'); if [ -n \"$m\" ]; then [ \"$m\" = GET ] && continue; else printf '%s' \"$l\" | grep -Eq '[[:space:]](-[fF]|--field|--raw-field|--input)' || continue; fi; echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"GitHub に書き込む gh api。-X GET 以外のメソッドか、-X GET なしの -f・-F・--input は POST になる。\"}}'; break; done; exit 0",
             "if": "Bash(gh *)",
             "timeout": 10
@@ -251,6 +263,7 @@
     ]
   },
   "autoMemoryEnabled": false,
+  "theme": "dark",
   "agentPushNotifEnabled": true,
-  "theme": "dark"
+  "tui": "fullscreen"
 }

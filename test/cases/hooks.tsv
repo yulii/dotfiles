@@ -17,7 +17,8 @@ ask	git push -qf origin HEAD
 ask	git push origin +main
 ask	git push origin +HEAD:main
 ask	git -C sub push -f origin HEAD
-ask	git -c core.x=y push --force origin HEAD
+# git -c is denied by guard-shell-forms; see the loops section
+deny	git -c core.x=y push --force origin HEAD
 ask	git --git-dir=.git push -f origin HEAD
 ask	git --work-tree . push origin +main
 # The hooks do not parse quotes, so a push in a message also asks
@@ -75,7 +76,7 @@ pass	git branch --format=%(refname)
 # Chained, git branch is denied for running in the sandbox; see the end
 deny	git branch -d topic && ls -f
 ask	git -C sub branch -D topic
-ask	git -c core.x=y branch -M old new
+deny	git -c core.x=y branch -M old new
 pass	git -C sub branch -d topic
 
 # git branch -D alone is allowed when every branch is the head of a merged
@@ -121,3 +122,82 @@ pass	git tag -a v1 -F - <<'MSG'\nSubject\n\ngit switch main && git pull origin m
 pass	gh pr create --title x --body "git pull origin main; git switch main"
 pass	ls && echo git switch main
 pass	grep 'a|git switch' f
+
+# Loops, NAME=$(...), and awk are denied: Claude Code cannot check them before
+# they run and asks for nearly every one, even in the sandbox. A script file
+# run with sh is not asked. Single quotes and heredoc bodies are not read.
+# Missed: sh -c '...', and a loop or awk inside single quotes
+deny	for f in a b; do cat $f; done
+deny	ls; for f in *.md; do wc -l $f; done
+deny	while read l; do echo $l; done < f
+deny	until test -f x; do sleep 1; done
+deny	if true; then for f in a; do :; done; fi
+deny	x=$(date); echo $x
+deny	x=`date`; echo $x
+deny	echo $(for f in a; do echo $f; done)
+deny	awk 'NR<=3' f
+deny	grep a f | awk '{print $1}'
+deny	ls && awk 1 f
+deny	cat > x.sh <<'EOF'\necho\nEOF\nawk 1 f
+pass	grep -n 'for f in' f
+pass	echo for while until awk
+pass	grep -n awk f
+pass	make test-awk
+pass	J=x.jsonl; jq . $J
+pass	cat "$TMPDIR/x"
+pass	echo "x=$(date)"
+pass	git log --format=$(echo %h)
+pass	echo $(date)
+pass	sh /tmp/x.sh
+pass	git commit -F - <<'EOF'\nfor x in y; do awk 1 f; done\nx=$(date)\nEOF
+pass	sh -c 'for f in a; do echo $f; done'
+
+# A heredoc written to a file is denied: Claude Code asked for 94% of them
+# into a $VAR path and 28% into a plain path. The Write tool writes files.
+# A heredoc on stdin, such as git commit -F -, passes
+deny	cat > x.md <<'EOF'\nbody\nEOF
+deny	cat <<'EOF' > x.md\nbody\nEOF
+deny	cat >> "$TMPDIR/x.md" <<EOF\nbody\nEOF
+deny	tee x.md <<'EOF'\nbody\nEOF
+deny	mkdir -p d && cat > d/x.md <<'EOF'\nbody\nEOF
+pass	git commit -F - <<'EOF'\nmsg\nEOF
+pass	git commit -q -F - <<'EOF' 2>&1\nmsg\nEOF
+pass	git commit -m "$(cat <<'EOF'\nmsg\nEOF\n)"
+pass	cat <<'EOF'\nhi\nEOF
+pass	cat <<'EOF' >/dev/null\nhi\nEOF
+pass	jq . <<< '{}' > out.json
+pass	git commit -F - <<'EOF'\nrun cat > x <<EOF and git -c x\nEOF
+
+# git -c is denied: a config value such as core.pager or core.sshCommand
+# runs a command, so Claude Code asks for every one
+deny	git -c core.pager=cat log
+deny	git status && git -c core.quotepath=false diff
+deny	git -C sub -c core.x=y status
+pass	git --no-pager log
+pass	git log -c
+pass	git -C sub status
+pass	echo "git -c x"
+
+# A script file run by a shell or python asks when it pushes or writes to
+# GitHub, since the hooks above see only the command line. The scripts are
+# in test/fixtures/scripts. Missed: a script another script or make runs,
+# commands built from variables, and sh < file
+ask	sh push.sh
+ask	bash ./push.sh
+ask	zsh push.sh arg
+ask	sh -e push.sh
+ask	. ./push.sh
+ask	source push.sh
+ask	ls && sh push.sh
+ask	python3 -I push.py
+ask	python3 push.py
+ask	sh gh-write.sh
+ask	sh gh-api-write.sh
+ask	sh gh-api-field.sh
+ask	sh gh-auth.sh
+pass	sh gh-read.sh
+pass	sh words.sh
+pass	sh missing.sh
+pass	cat push.sh
+pass	grep -n push push.sh
+pass	sh -c 'echo hi'
