@@ -44,6 +44,7 @@ head='(^|[;&|({`])[[:space:]]*((do|then|else|elif|!)[[:space:]]+)*'
 reason=
 if printf '%s\n' "$bare" | grep -Eq "$head(for|while|until)([[:space:]]|\$)" ||
   printf '%s\n' "$bare" | grep -Eq '(^|[[:space:];&|(])[A-Za-z_][A-Za-z0-9_]*=(\$\(|`)'; then
+  # shellcheck disable=SC2016 # $(…) is text for Claude, not an expansion
   reason='ループと 名前=$(…) は Claude Code が実行前に確かめられず、承認要求になる。スクラッチパッドにスクリプトを書き、sh <パス> で実行する。ファイルの中のループは止まらない。'
 fi
 if printf '%s\n' "$bare" | grep -Eq "${head}awk([[:space:]]|\$)"; then
