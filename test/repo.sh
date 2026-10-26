@@ -24,7 +24,9 @@ scripts=$(mktemp "${TMPDIR:-/tmp}/repo-scripts.XXXXXX")
 tracked=$(mktemp "${TMPDIR:-/tmp}/repo-tracked.XXXXXX")
 trap 'rm -f "$scripts" "$tracked"' EXIT
 
-git ls-files '*.sh' >"$scripts"
+# Scripts include untracked ones not ignored, so a new script is linted
+# before it is staged. The secret scan below reads tracked files only.
+git ls-files --cached --others --exclude-standard '*.sh' >"$scripts"
 git ls-files >"$tracked"
 
 # Shell syntax
@@ -69,9 +71,10 @@ for p in $linked; do
   if [ -e "$p" ]; then ok "link source $p"; else ng "link source missing: $p"; fi
 done
 
-# Every linkable file is linked
+# Every linkable file is linked, untracked ones included
 exempt="CLAUDE.md .gitallowed .gitattributes .gitignore Makefile README.md configure.sh"
-for f in $(git ls-files | grep -v /) $(git ls-files 'claude/*'); do
+for f in $(git ls-files --cached --others --exclude-standard | grep -v /) \
+  $(git ls-files --cached --others --exclude-standard 'claude/*'); do
   case " $exempt " in *" $f "*) continue ;; esac
   if printf '%s\n' "$linked" | grep -qx "$f"; then
     ok "linked $f"
