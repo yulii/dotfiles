@@ -82,6 +82,8 @@
       "Read(~/.gnupg/**)",
       "Read(~/.netrc)",
       "Read(~/.docker/config.json)",
+      "Read(~/Downloads/**)",
+      "Edit(~/Downloads/**)",
       "Bash(osascript *)",
       "Bash(open *)",
       "Bash(git checkout)",
@@ -161,8 +163,13 @@
       "Bash(git rm * -rf*)",
       "Bash(git rm -qf*)",
       "Bash(git rm * -qf*)"
-    ]
+    ],
+    "disableBypassPermissionsMode": "disable"
   },
+  "deniedMcpServers": [],
+  "claudeMdExcludes": [
+    "/Users/*/Downloads/**"
+  ],
   "hooks": {
     "PreToolUse": [
       {
@@ -242,7 +249,8 @@
         "~/.aws",
         "~/.gnupg",
         "~/.netrc",
-        "~/.docker/config.json"
+        "~/.docker/config.json",
+        "~/Downloads"
       ]
     },
     "enableWeakerNetworkIsolation": true,
