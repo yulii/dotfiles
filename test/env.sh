@@ -46,8 +46,9 @@ for h in pre-commit commit-msg prepare-commit-msg; do
 done
 
 # Brewfile matches the machine. Outdated packages still match; make upgrade
-# handles them.
-if brew bundle check --no-upgrade --file=./brew/Brewfile >/dev/null 2>&1; then
+# handles them. HOMEBREW_NO_AUTO_UPDATE skips the API data download, whose
+# lock under /opt/homebrew the sandbox blocks.
+if HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --no-upgrade --file=./brew/Brewfile >/dev/null 2>&1; then
   ok "Brewfile in sync"
 else
   ng "Brewfile drifted from the machine"

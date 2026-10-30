@@ -114,7 +114,9 @@
       "Bash(docker login *)",
       "Bash(docker -H*)",
       "Bash(docker --host*)",
-      "Bash(docker context use *)"
+      "Bash(docker context use *)",
+      "Artifact",
+      "mcp__claude_ai_Claude_Docs"
     ],
     "ask": [
       "Bash(gh pr merge*)",
